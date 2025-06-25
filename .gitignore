@@ -1,0 +1,11 @@
+/node_modules
+/src/tmp/*
+!/src/tmp/.gitkeep
+/src/uploads/photos/*
+!/src/uploads/photos/.gitkeep
+
+.env
+
+.vscode
+.DS_Store
+.idea
