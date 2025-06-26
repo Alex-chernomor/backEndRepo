@@ -4,6 +4,7 @@ import app from './app.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 import { getEnvVar } from './utils/getEnvVar.js';
 import cors from 'cors';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 async function bootstrap() {
   try {
