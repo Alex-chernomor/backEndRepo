@@ -1,0 +1,32 @@
+type: object
+required:
+  - _id
+  - title
+  - description
+  - category
+  - ingredients
+  - instructions
+  - owner
+properties:
+  _id:
+    description: 'Recipe`s id'
+    type: string
+    example: '60f0f13b1c4ae70017b2a7a1'
+  title:
+    description: 'Recipe`s name'
+    type: string
+    example: 'Breakfest'
+  description:
+    type: string
+    example: 'A soft, creamy classic with butter and eggs.'
+  ingredients:
+    type: array
+    items:
+      type: string
+      example: ['creamy', 'eggs', 'butter']
+  instructions:
+    type: string
+    example: 'Crack the eggs into a small bowl. Add a pinch of salt and a bit of black pepper. Whisk the eggs with a fork or whisk until smooth and slightly foamy.'
+  owner:
+    type: string
+    example: '666aaa123456789bbb000'
