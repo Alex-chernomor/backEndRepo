@@ -1,17 +1,17 @@
-import { getAllRecipes } from '../services/recipes';
-import { parseFilterParams } from '../utils/parseFilterParams';
-import { parsePaginationParams } from '../utils/parsePaginationParams';
+import { getAllRecipes, getRecipeById } from '../services/recipes.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const { category, ingredient } = parseFilterParams(req.query);
-  const query = req.query.qury;
+  const { category, ingredientId } = parseFilterParams(req.query);
+  const query = req.query.query;
 
   const data = await getAllRecipes({
     page,
     perPage,
     category,
-    ingredient,
+    ingredientId,
     query,
   });
 
@@ -19,4 +19,16 @@ export const getAllRecipesController = async (req, res) => {
     status: 200,
     data,
   });
+};
+
+export const getRecipeByIdController = async (req, res) => {
+  const recipeId = req.params.id;
+  const recipe = await getRecipeById(recipeId);
+
+  // на мою думку краще обробляти помилки зі допомогою бібліотеки http-errors тим паче якщо використовується error handler
+  if (recipe === null) {
+    return res.status(404).send({ message: 'Recipe not found' });
+  }
+
+  res.json({ data: recipe });
 };

@@ -1,20 +1,41 @@
-const parseType = (type) => {
-  if (typeof type !== 'string') return;
+const parseCategory = (category) => {
+  if (typeof category !== 'string') return;
 
-  const isType = ['work', 'home', 'personal'].includes(type);
-  if (isType) return type;
+  const isCategory = [
+    'Seafood',
+    'Lamb',
+    'Starter',
+    'Chicken',
+    'Beef',
+    'Dessert',
+    'Vegan',
+    'Pork',
+    'Vegetarian',
+    'Miscellaneous',
+    'Pasta',
+    'Breakfast',
+    'Side',
+    'Goat',
+    'Soup',
+  ].includes(category);
+  if (isCategory) return category;
 };
 
-const parseIsFavourite = (isFav) => {
-  return typeof isFav === 'string' ? isFav === 'true' : Boolean(isFav);
+const parseIngredientId = (ingredientId) => {
+  if (typeof category !== 'string') return;
+
+  const allIngredientsIds = [];
+
+  const isIngredientId = allIngredientsIds.includes(ingredientId);
+  if (isIngredientId) return ingredientId;
 };
 
-export const parseFilterParams = ({ contactType, isFavourite }) => {
-  const parsedType = parseType(contactType);
-  const parsedIsFavourite = parseIsFavourite(isFavourite);
+export const parseFilterParams = ({ category, ingredientId }) => {
+  const parsedCategory = parseCategory(category);
+  const parsedIngredientId = parseIngredientId(ingredientId);
 
   return {
-    type: parsedType,
-    isFavotite: parsedIsFavourite,
+    category: parsedCategory,
+    ingredientId: parsedIngredientId,
   };
 };

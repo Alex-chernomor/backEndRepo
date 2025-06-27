@@ -1,10 +1,10 @@
-import { RecipesCollection } from '../models/recipe';
+import { RecipesCollection } from '../models/recipe.js';
 
 export const getAllRecipes = async ({
   page,
   perPage,
   category,
-  ingredient,
+  ingredientId,
   query,
 }) => {
   const limit = perPage;
@@ -16,7 +16,7 @@ export const getAllRecipes = async ({
     recipesQuery.where('category').equals(category);
   }
   if (ingredient) {
-    recipesQuery.where('ingredients.id').equals(ingredient);
+    recipesQuery.where('ingredients.id').equals(ingredientId);
   }
   if (query) {
     recipesQuery.where('title').regex(new RegExp(query, 'i'));
@@ -30,4 +30,8 @@ export const getAllRecipes = async ({
   const totalPages = Math.ceil(count / perPage);
 
   return { data: recipes, total: count, page, perPage, totalPages };
+};
+
+export const getRecipeById = async (id) => {
+  return await RecipesCollection.findById(recipeId);
 };
