@@ -1,0 +1,28 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API documentation for Tasteorama project",
+    "description": "API documentation for Tasteorama project"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Categories",
+      "description": "Operations about recipe categories"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/api/categories": {
+      "get": {
+        "$ref": "../swagger/path/recipes/get.yaml"
+      }
+    }
+  }
+}

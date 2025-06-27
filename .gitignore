@@ -5,7 +5,10 @@
 !/src/uploads/photos/.gitkeep
 
 .env
+.history
 
 .vscode
 .DS_Store
 .idea
+
+pullrequest-list.txt

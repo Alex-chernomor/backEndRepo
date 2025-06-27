@@ -1,5 +1,5 @@
 import { RecipesCollection } from '../models/recipe.js';
-
+import { User } from '../models/user.js';
 export const getAllRecipes = async ({
   page,
   perPage,
@@ -35,4 +35,55 @@ export const getAllRecipes = async ({
 
 export const createRecipe = async (payload) => {
   return RecipesCollection.create(payload);
+};
+
+export const addFavorite = async (userId, recipeId) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    {
+      $addToSet: { favorites: recipeId },
+    },
+    { new: true },
+  );
+};
+
+export const deleteFavorite = async (userId, recipeId) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    {
+      $pull: { favorites: recipeId },
+    },
+    { new: true },
+  );
+};
+
+export const getAllFavorites = async (userId) => {
+  const page = 1;
+  const perPage = 12;
+  const sortBy = 'createdAt';
+  const sortOrder = -1;
+
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
+
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const favoriteIds = user.favorites;
+  const favoriteRecipes = { _id: { $in: favoriteIds } };
+
+  const [recipesCount, recipes] = await Promise.all([
+    RecipesCollection.countDocuments(favoriteRecipes),
+    RecipesCollection.find(favoriteRecipes)
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder }),
+  ]);
+
+  const paginationData = calculatePaginationData(recipesCount, perPage, page);
+
+  return {
+    data: recipes,
+    ...paginationData,
+  };
 };
