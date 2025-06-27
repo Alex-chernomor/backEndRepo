@@ -1,0 +1,11 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '6462a6cd4c3d0ddd28897f8a'
+  name:
+    type: string
+    example: 'Breakfast'
+required:
+  - _id
+  - name
