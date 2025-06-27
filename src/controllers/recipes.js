@@ -10,7 +10,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const { category, ingredientId } = parseFilterParams(req.query);
+  const { category, ingredientId } = await parseFilterParams(req.query);
   const query = req.query.query;
 
   const data = await getAllRecipes({

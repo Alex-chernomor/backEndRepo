@@ -24,3 +24,5 @@ router.post(
   validateBody(loginSchema),
   ctrlWrapper(loginController),
 );
+
+export default router
