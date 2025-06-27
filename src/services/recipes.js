@@ -9,6 +9,7 @@ export const getAllRecipes = async ({
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
+  console.log(ingredientId);
 
   const recipesQuery = RecipesCollection.find();
 

@@ -22,9 +22,9 @@ const parseCategory = (category) => {
 };
 
 const parseIngredientId = (ingredientId) => {
-  if (typeof category !== 'string') return;
+  if (typeof ingredientId !== 'string') return;
 
-  const allIngredientsIds = [];
+  const allIngredientsIds = ['640c2dd963a319ea671e370c'];
 
   const isIngredientId = allIngredientsIds.includes(ingredientId);
   if (isIngredientId) return ingredientId;
