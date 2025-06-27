@@ -9,12 +9,13 @@ import { errorHandler } from './middlewares/errorHandler.js';
 async function bootstrap() {
   try {
     app.use(cors());
+    // може краще const PORT = parseInt(getEnvVar('PORT', '3000'));?
     const PORT = getEnvVar('PORT');
 
     await initMongoConnection();
 
     app.use(errorHandler);
-    
+
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',
