@@ -15,7 +15,7 @@ export const getAllRecipes = async ({
   if (category) {
     recipesQuery.where('category').equals(category);
   }
-  if (ingredient) {
+  if (ingredientId) {
     recipesQuery.where('ingredients.id').equals(ingredientId);
   }
   if (query) {
@@ -27,11 +27,7 @@ export const getAllRecipes = async ({
     recipesQuery.skip(skip).limit(limit).exec(),
   ]);
 
-  const totalPages = Math.ceil(count / perPage);
+  const totalPages = Math.ceil(recipesCount / perPage);
 
-  return { data: recipes, total: count, page, perPage, totalPages };
-};
-
-export const getRecipeById = async (id) => {
-  return await RecipesCollection.findById(recipeId);
+  return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
