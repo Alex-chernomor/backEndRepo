@@ -16,8 +16,6 @@ const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getAllRecipesController));
 
-// router.use(auth);
-
 router.post(
   '/favorite/:recipeId',
   isValidId,
