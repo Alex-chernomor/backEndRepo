@@ -33,6 +33,11 @@ export const getAllRecipes = async ({
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
 
+export const getRecipesOwn = async (userId) => {
+  const recipes = await RecipesCollection.find({ owner: userId });
+  return recipes;
+};
+
 export const addFavorite = async (userId, recipeId) => {
   return await User.findByIdAndUpdate(
     userId,
