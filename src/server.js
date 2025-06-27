@@ -17,14 +17,14 @@ async function bootstrap() {
     await initMongoConnection();
 
     app.use(router);
-    app.use(notFoundHandler);
-    app.use(errorHandler);
-
+    
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',
       });
     });
+    app.use(notFoundHandler);
+    app.use(errorHandler);
 
     app.listen(PORT, (error) => {
       if (error) {
