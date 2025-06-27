@@ -2,6 +2,7 @@ import { User } from '../models/user.js';
 import createHttpError from 'http-errors';
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+import { Session } from '../models/session.js';
 
 export const registerUser = async (payload) => {
   const user = await User.findOne({ email: payload.email });
@@ -14,7 +15,6 @@ export const registerUser = async (payload) => {
 
   return await User.create(payload);
 };
-
 
 export async function loginUser() {
   const user = await User.findOne({ email });
@@ -32,6 +32,29 @@ export async function loginUser() {
     userId: user._id,
     accessToken,
     refreshToken,
+    accessTokenValidUntill: new Date(Date.now() + 15 * 60 * 60 * 1000),
+    refreshTokenValidUntill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  });
+}
+
+export async function refreshSession(sessionId, refreshToken) {
+  const session = await Session.findOne({ _id: sessionId });
+
+  if (session === null) {
+    throw new createHttpError.Unauthorized('Session not found');
+  }
+  if (session.refreshToken !== refreshToken) {
+    throw new createHttpError.Unauthorized('Refresh token is invalid');
+  }
+  if (session.refreshTokenValidUntil < new Date()) {
+    throw new createHttpError.Unauthorized('Refresh token is expired');
+  }
+  await Session.deleteOne({ _id: session._id });
+
+  return Session.create({
+    userId: session.userId,
+    accessToken: crypto.randomBytes(30).toString('base64'),
+    refreshToken: crypto.randomBytes(30).toString('base64'),
     accessTokenValidUntill: new Date(Date.now() + 15 * 60 * 60 * 1000),
     refreshTokenValidUntill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
