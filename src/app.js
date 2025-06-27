@@ -2,7 +2,11 @@ import express from 'express';
 
 import { Recipe } from './models/recipe.js';
 
+import usersRouter from './router/users.js';
+
 const app = express();
+
+app.use('/api/users', usersRouter);
 
 app.get('/api/recipes', async (req, res) => {
   const recipes = await Recipe.find();
