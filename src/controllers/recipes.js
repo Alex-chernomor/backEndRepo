@@ -4,13 +4,14 @@ import {
   deleteFavorite,
   getAllFavorites,
   getAllRecipes,
+  getRecipesOwn,
 } from '../services/recipes.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const { category, ingredientId } = parseFilterParams(req.query);
+  const { category, ingredientId } = await parseFilterParams(req.query);
   const query = req.query.query;
 
   const data = await getAllRecipes({
@@ -24,6 +25,22 @@ export const getAllRecipesController = async (req, res) => {
   res.status(200).json({
     status: 200,
     data,
+  });
+};
+
+export const getOwnRecipesController = async (req, res, next) => {
+  const recipes = await getRecipesOwn({
+    owner: req.user._id,
+  });
+
+  if (!recipes) {
+    throw createHttpError(404, 'Own recipes not found');
+  }
+
+  res.json({
+    status: 200,
+    message: 'Successfully found own recipes!',
+    data: recipes,
   });
 };
 

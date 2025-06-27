@@ -1,5 +1,5 @@
 import { RecipesCollection } from '../models/recipe.js';
-import { User } from '../models/User.js';
+import { User } from '../models/user.js';
 export const getAllRecipes = async ({
   page,
   perPage,
@@ -31,6 +31,11 @@ export const getAllRecipes = async ({
   const totalPages = Math.ceil(recipesCount / perPage);
 
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
+};
+
+export const getRecipesOwn = async (userId) => {
+  const recipes = await RecipesCollection.find({ owner: userId });
+  return recipes;
 };
 
 export const addFavorite = async (userId, recipeId) => {
