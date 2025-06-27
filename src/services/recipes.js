@@ -1,5 +1,6 @@
 import { RecipesCollection } from '../models/recipe.js';
-import { User } from '../models/User.js';
+import { UsersCollection } from '../models/user.js';
+
 export const getAllRecipes = async ({
   page,
   perPage,
@@ -34,7 +35,7 @@ export const getAllRecipes = async ({
 };
 
 export const addFavorite = async (userId, recipeId) => {
-  return await User.findByIdAndUpdate(
+  return await UsersCollection.findByIdAndUpdate(
     userId,
     {
       $addToSet: { favorites: recipeId },

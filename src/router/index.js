@@ -2,7 +2,7 @@ import { Router } from 'express';
 import recipesRouter from './recipes.js';
 import authRouter from './auth.js';
 import ingredientsRouter from './ingredients.js';
-import authRouter from './auth.js';
+
 // треба буде використати цю міделвару в роуті авторизації auth
 //* import { authenticate } from '../middlewares/authenticate.js';
 

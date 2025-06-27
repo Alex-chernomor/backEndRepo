@@ -1,4 +1,4 @@
-import { User } from '../models/user.js';
+import { UsersCollection } from '../models/user.js';
 // import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 
@@ -11,14 +11,14 @@ export const registerUser = async (payload) => {
 
   payload.password = await bcrypt.hash(payload.password, 10);
 
-  return await User.create(payload);
+  return await UsersCollection.create(payload);
 };
 
 import createHttpError from 'http-errors';
 import crypto from 'node:crypto';
 
 export async function loginUser() {
-  const user = await User.findOne({ email });
+  const user = await UsersCollection.findOne({ email });
   if (user === null) {
     throw new createHttpError.Unauthorized('Email or password is incorrect');
   }
