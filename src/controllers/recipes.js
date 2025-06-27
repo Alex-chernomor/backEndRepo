@@ -4,6 +4,7 @@ import {
   deleteFavorite,
   getAllFavorites,
   getAllRecipes,
+  getRecipeById,
 } from '../services/recipes.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
@@ -24,6 +25,17 @@ export const getAllRecipesController = async (req, res) => {
   res.status(200).json({
     status: 200,
     data,
+  });
+};
+
+export const getRecipeByIdController = async (req, resp) => {
+  const { recipeId } = req.params;
+  const recipe = await getRecipeById(recipeId);
+
+  resp.status(200).json({
+    status: 200,
+    message: `Successfully found recipe by id!`,
+    data: recipe,
   });
 };
 

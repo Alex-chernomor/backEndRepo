@@ -1,8 +1,6 @@
-
-import { model, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 
 const userSchema = new Schema(
-
   {
     name: {
       type: String,
@@ -17,22 +15,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    favorites: [
-      {
-
-        type: mongoose.Schema.Types.ObjectId,
-
-        ref: 'Recipe',
-      },
-    ],
-    own: [
-      {
-
-        type: mongoose.Schema.Types.ObjectId,
-
-        ref: 'Recipe',
-      },
-    ],
+    favorites: [{ type: Schema.Types.ObjectId, ref: 'recipes', default: [] }],
+    own: [{ type: Schema.Types.ObjectId, ref: 'recipes', default: [] }],
   },
   {
     timestamps: true,
@@ -41,15 +25,9 @@ const userSchema = new Schema(
 );
 
 userSchema.methods.toJSON = function () {
-
-
-
-
   const object = this.toObject();
   delete object.password;
   return object;
 };
 
-
-export const User = mongoose.model('User', userSchema);
-
+export const User = model('User', userSchema);
