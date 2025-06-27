@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { getAllIngredientsController } from '../controllers/ingredients.js';
+import {getAllIngredientsController} from '../controllers/ingredients.js'
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', ctrlWrapper(getAllIngredientsController));
+router.get('/ingredients', ctrlWrapper(getAllIngredientsController));
 
-export default router;
+export default router

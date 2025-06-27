@@ -11,7 +11,7 @@ import router from './router/index.js';
 async function bootstrap() {
   try {
     app.use(cors());
-    // може краще const PORT = parseInt(getEnvVar('PORT', '3000'));?
+
     const PORT = getEnvVar('PORT');
 
     await initMongoConnection();

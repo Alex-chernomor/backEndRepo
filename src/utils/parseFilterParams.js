@@ -21,18 +21,19 @@ const parseCategory = (category) => {
   if (isCategory) return category;
 };
 
-const parseIngredientId = (ingredientId) => {
+const parseIngredientId = async (ingredientId) => {
   if (typeof ingredientId !== 'string') return;
 
-  const allIngredientsIds = ['640c2dd963a319ea671e370c'];
+  const allIngredients = await getAllIngredients();
+  const ingredientsIds = allIngredients.map((ingredient) => ingredient._id);
 
-  const isIngredientId = allIngredientsIds.includes(ingredientId);
+  const isIngredientId = ingredientsIds.includes(ingredientId);
   if (isIngredientId) return ingredientId;
 };
 
-export const parseFilterParams = ({ category, ingredientId }) => {
+export const parseFilterParams = async ({ category, ingredientId }) => {
   const parsedCategory = parseCategory(category);
-  const parsedIngredientId = parseIngredientId(ingredientId);
+  const parsedIngredientId = await parseIngredientId(ingredientId);
 
   return {
     category: parsedCategory,

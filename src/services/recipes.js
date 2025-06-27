@@ -1,5 +1,5 @@
 import { RecipesCollection } from '../models/recipe.js';
-import { User } from '../models/User.js';
+import { User } from '../models/user.js';
 export const getAllRecipes = async ({
   page,
   perPage,

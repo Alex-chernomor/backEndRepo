@@ -1,5 +1,6 @@
 import { User } from '../models/user.js';
-// import createHttpError from 'http-errors';
+import createHttpError from 'http-errors';
+import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 
 export const registerUser = async (payload) => {
@@ -14,8 +15,6 @@ export const registerUser = async (payload) => {
   return await User.create(payload);
 };
 
-import createHttpError from 'http-errors';
-import crypto from 'node:crypto';
 
 export async function loginUser() {
   const user = await User.findOne({ email });
