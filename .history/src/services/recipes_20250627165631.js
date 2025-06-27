@@ -33,6 +33,21 @@ export const getAllRecipes = async ({
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
 
-export const createRecipe = async (payload) => {
-  return RecipesCollection.create(payload);
+export const createRecipe = async ({
+  title,
+  category,
+  owner,
+  area,
+  instructions,
+  description,
+  thumb,
+  ingredients,
+}) => {
+  const recipe = RecipesCollection.create();
+  const data = recipe.save();
+
+  res.status(201).json({
+    status: 201,
+    data: { id: data.id },
+  });
 };

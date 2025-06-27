@@ -24,8 +24,7 @@ export const getAllRecipesController = async (req, res) => {
 export const createRecipeController = async (req, res) => {
   const data = await createRecipe({
     ...req.body,
-    time: new Date(),
-    owner: req.user.id,
+    owner: 'req.user.id',
   });
 
   res.status(200).json({

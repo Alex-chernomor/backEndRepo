@@ -1,4 +1,4 @@
-import { createRecipe, getAllRecipes } from '../services/recipes.js';
+import { getAllRecipes } from '../services/recipes.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
@@ -22,15 +22,18 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
-  const data = await createRecipe({
-    ...req.body,
-    time: new Date(),
-    owner: req.user.id,
+  const { category, ingredientId } = parseFilterParams(req.query);
+
+  const data = await getAllRecipes({
+    page,
+    perPage,
+    category,
+    ingredientId,
+    query,
   });
 
   res.status(200).json({
     status: 200,
-    message: 'Recipe was created successfully',
     data,
   });
 };

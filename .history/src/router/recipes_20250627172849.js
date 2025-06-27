@@ -4,7 +4,6 @@ import {
   createRecipeController,
 } from '../controllers/recipes.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
 

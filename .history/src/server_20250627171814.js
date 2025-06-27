@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express from 'express';
+
 import app from './app.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 import { getEnvVar } from './utils/getEnvVar.js';

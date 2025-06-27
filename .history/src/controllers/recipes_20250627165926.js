@@ -24,13 +24,12 @@ export const getAllRecipesController = async (req, res) => {
 export const createRecipeController = async (req, res) => {
   const data = await createRecipe({
     ...req.body,
-    time: new Date(),
     owner: req.user.id,
   });
 
   res.status(200).json({
     status: 200,
-    message: 'Recipe was created successfully',
+    message: 'Recipe was created successfuly',
     data,
   });
 };

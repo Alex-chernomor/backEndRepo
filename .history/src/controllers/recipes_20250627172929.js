@@ -1,6 +1,7 @@
 import { createRecipe, getAllRecipes } from '../services/recipes.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { Types } from 'mongoose';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -22,6 +23,7 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
+  console.log(req.body);
   const data = await createRecipe({
     ...req.body,
     time: new Date(),

@@ -34,5 +34,5 @@ export const getAllRecipes = async ({
 };
 
 export const createRecipe = async (payload) => {
-  return RecipesCollection.create(payload);
+  const recipe = RecipesCollection.create(payload);
 };

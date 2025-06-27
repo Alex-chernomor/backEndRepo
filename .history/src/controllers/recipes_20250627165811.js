@@ -22,15 +22,18 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
+  const { category, ingredientId } = parseFilterParams(req.body);
+
   const data = await createRecipe({
-    ...req.body,
-    time: new Date(),
-    owner: req.user.id,
+    page,
+    perPage,
+    category,
+    ingredientId,
+    query,
   });
 
   res.status(200).json({
     status: 200,
-    message: 'Recipe was created successfully',
     data,
   });
 };
