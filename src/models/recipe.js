@@ -1,6 +1,18 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-const recipeSchema = new mongoose.Schema(
+const ingredientsSchema = new Schema({
+  id: {
+    type: String,
+    required: true,
+    ref: 'ingredient',
+  },
+  measure: {
+    type: String,
+    required: true,
+  },
+});
+
+const recipeSchema = new Schema(
   {
     title: {
       type: String,
@@ -8,20 +20,34 @@ const recipeSchema = new mongoose.Schema(
     },
     category: {
       type: String,
+      enum: [
+        'Seafood',
+        'Lamb',
+        'Starter',
+        'Chicken',
+        'Beef',
+        'Dessert',
+        'Vegan',
+        'Pork',
+        'Vegetarian',
+        'Miscellaneous',
+        'Pasta',
+        'Breakfast',
+        'Side',
+        'Goat',
+        'Soup',
+      ],
       required: true,
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     area: {
       type: String,
-      required: true,
+      required: false,
     },
-    instructions: {
-      type: String,
-      required: true,
-    },
+    instructions: { type: String, required: true },
     description: {
       type: String,
       required: true,
@@ -29,20 +55,14 @@ const recipeSchema = new mongoose.Schema(
     thumb: {
       type: String,
       required: false,
-      default: null,
     },
     time: {
       type: String,
       required: true,
     },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
+    ingredients: [ingredientsSchema],
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  },
+  { timestamps: true, versionKey: false },
 );
-export const Recipe = mongoose.model('Recipe', recipeSchema);
+
+export const RecipesCollection = model('recipes', recipeSchema);
