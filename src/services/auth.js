@@ -2,6 +2,7 @@ import { User } from '../models/user.js';
 import createHttpError from 'http-errors';
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+import { Session } from '../models/session';
 
 export const registerUser = async (payload) => {
   const user = await User.findOne({ email: payload.email });
@@ -14,7 +15,6 @@ export const registerUser = async (payload) => {
 
   return await User.create(payload);
 };
-
 
 export async function loginUser() {
   const user = await User.findOne({ email });
@@ -36,3 +36,7 @@ export async function loginUser() {
     refreshTokenValidUntill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
 }
+
+export const logoutUser = async (sessionId) => {
+  await Session.deleteOne({ _id: sessionId });
+};

@@ -7,6 +7,7 @@ import {
   deleteFavoriteController,
   getAllFavoritesController,
   getAllRecipesController,
+  getOwnRecipesController,
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -15,6 +16,8 @@ const router = express.Router();
 const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getAllRecipesController));
+
+router.get('/own', ctrlWrapper(getOwnRecipesController));
 
 router.post(
   '/favorite/:recipeId',
