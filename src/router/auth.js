@@ -14,3 +14,5 @@ router.post(
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
 );
+
+export default router;
