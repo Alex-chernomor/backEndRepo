@@ -25,4 +25,4 @@ router.post(
   ctrlWrapper(loginController),
 );
 
-export default router
+export default router;
