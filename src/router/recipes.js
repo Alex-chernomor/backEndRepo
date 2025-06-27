@@ -6,8 +6,10 @@ import {
   getAllRecipesController,
 } from '../controllers/recipes.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = Router();
+const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getAllRecipesController));
 
