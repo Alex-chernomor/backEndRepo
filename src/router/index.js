@@ -1,6 +1,10 @@
-import express from 'express';
-
+import { Router } from 'express';
+import recipesRouter from './recipes.js';
 import authRouter from './auth.js';
-const router = express.Router();
 
-router.use('/auth', authRouter);
+const router = Router();
+
+router.use('/api/recipes', recipesRouter);
+router.use('/api/auth', authRouter);
+
+export default router;
