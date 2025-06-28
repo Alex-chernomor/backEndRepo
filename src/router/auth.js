@@ -6,6 +6,7 @@ import { registerUserSchema, loginSchema } from '../validation/auth.js';
 import {
   registerUserController,
   loginController,
+  logoutController,
   refreshController,
 } from '../controllers/auth.js';
 
@@ -25,6 +26,8 @@ router.post(
   validateBody(loginSchema),
   ctrlWrapper(loginController),
 );
+
+router.get('/logout', ctrlWrapper(logoutController));
 
 router.post('/refresh', ctrlWrapper(refreshController));
 

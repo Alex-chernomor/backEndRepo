@@ -37,6 +37,10 @@ export async function loginUser() {
   });
 }
 
+export const logoutUser = async (sessionId) => {
+  await Session.deleteOne({ _id: sessionId });
+};
+
 export async function refreshSession(sessionId, refreshToken) {
   const session = await Session.findOne({ _id: sessionId });
 
