@@ -33,8 +33,14 @@ export const getAllRecipes = async ({
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
 
+<<<<<<< HEAD
 export const getRecipeById = async (recipeId) => {
   return await RecipesCollection.findOne({ _id: recipeId });
+=======
+export const getRecipesOwn = async (userId) => {
+  const recipes = await RecipesCollection.find({ owner: userId });
+  return recipes;
+>>>>>>> main
 };
 
 export const addFavorite = async (userId, recipeId) => {

@@ -11,20 +11,20 @@ import router from './router/index.js';
 async function bootstrap() {
   try {
     app.use(cors());
-    // може краще const PORT = parseInt(getEnvVar('PORT', '3000'));?
+
     const PORT = getEnvVar('PORT');
 
     await initMongoConnection();
 
     app.use(router);
-    app.use(notFoundHandler);
-    app.use(errorHandler);
-
+    
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',
       });
     });
+    app.use(notFoundHandler);
+    app.use(errorHandler);
 
     app.listen(PORT, (error) => {
       if (error) {

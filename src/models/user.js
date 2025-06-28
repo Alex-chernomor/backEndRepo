@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -15,15 +15,14 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    favorites: [{ type: Schema.Types.ObjectId, ref: 'recipes', default: [] }],
-    own: [{ type: Schema.Types.ObjectId, ref: 'recipes', default: [] }],
+    favorites: [{ type: Schema.Types.ObjectId, ref: 'Recipe', default: [] }],
+    own: [{ type: Schema.Types.ObjectId, ref: 'Recipe', default: [] }],
   },
   {
     timestamps: true,
     versionKey: false,
   },
 );
-
 userSchema.methods.toJSON = function () {
   const object = this.toObject();
   delete object.password;
