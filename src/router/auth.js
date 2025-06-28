@@ -7,6 +7,7 @@ import {
   registerUserController,
   loginController,
   logoutController,
+  refreshController,
 } from '../controllers/auth.js';
 
 const router = Router();
@@ -27,5 +28,7 @@ router.post(
 );
 
 router.get('/logout', ctrlWrapper(logoutController));
+
+router.post('/refresh', ctrlWrapper(refreshController));
 
 export default router;

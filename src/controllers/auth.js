@@ -1,4 +1,9 @@
-import { registerUser, loginUser, logoutUser } from '../services/auth.js';
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshSession,
+} from '../services/auth.js';
 
 export const registerUserController = async (req, resp) => {
   const user = await registerUser(req.body);
@@ -15,12 +20,12 @@ export async function loginController(req, res) {
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntill,
+    expires: session.refreshTokenValidUntil,
   });
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntill,
+    expires: session.refreshTokenValidUntil,
   });
 
   res.status(200).json({
@@ -41,3 +46,26 @@ export const logoutController = async (req, res) => {
 
   res.status(204).send();
 };
+
+export async function refreshController(req, res) {
+  const { refreshToken, sessionId } = req.cookie;
+  const session = await refreshSession(sessionId, refreshToken);
+
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Refresh complete successfully',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+}
