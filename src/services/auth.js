@@ -2,7 +2,7 @@ import { User } from '../models/user.js';
 import createHttpError from 'http-errors';
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
-import { Session } from '../models/session';
+import { Session } from '../models/session.js';
 
 export const registerUser = async (payload) => {
   const user = await User.findOne({ email: payload.email });
