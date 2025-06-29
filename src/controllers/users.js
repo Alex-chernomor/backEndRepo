@@ -1,15 +1,23 @@
-import { currentUser } from '../services/users.js';
 import { UserCollection } from '../models/users.js';
+import createHttpError from 'http-errors';
 
-export const currentUserController = async (req, res, next) => {
+export const getUserById = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const user = await currentUser(userId, UserCollection);
+    const { userId } = req.params;
 
-    res.status(200).json({
-      status: 'success',
+    const user = await UserCollection.findById(userId).select('-password'); // не віддаємо пароль
+
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    res.json({
+      status: 200,
+      message: 'User found',
       data: {
-        user,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
       },
     });
   } catch (error) {
