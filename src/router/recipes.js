@@ -1,5 +1,5 @@
 import express from 'express';
-import { isValidId } from '../middlewares/validateObjectId.js';
+import { isValidId } from '../middlewares/isValidId.js';
 import { auth } from '../middlewares/auth.js';
 import {
   addFavoriteController,
@@ -12,7 +12,6 @@ import {
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-// import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 const jsonParser = express.json();
