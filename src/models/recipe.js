@@ -4,7 +4,7 @@ const ingredientsSchema = new Schema({
   id: {
     type: String,
     required: true,
-    ref: 'ingredient',
+    ref: 'Ingredient',
   },
   measure: {
     type: String,

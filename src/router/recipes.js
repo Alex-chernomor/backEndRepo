@@ -9,6 +9,8 @@ import {
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { createRecipeSchema } from '../validation/recipe.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -24,6 +26,7 @@ router.post(
   isValidId,
   jsonParser,
   auth,
+  validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
 
