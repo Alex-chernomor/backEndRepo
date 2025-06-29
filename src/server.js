@@ -1,5 +1,5 @@
 import 'dotenv/config';
-
+import express from 'express';
 import app from './app.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 import { getEnvVar } from './utils/getEnvVar.js';
@@ -16,8 +16,9 @@ async function bootstrap() {
 
     await initMongoConnection();
 
-    app.use(router);
-    
+    app.use(express.json());
+    app.use('/api', router);
+
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',

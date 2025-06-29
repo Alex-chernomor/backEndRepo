@@ -5,8 +5,8 @@ import ingredientsRouter from './ingredients.js';
 
 const router = Router();
 
-router.use('/api/recipes', recipesRouter);
-router.use('/api/auth', authRouter);
-router.use('/api', ingredientsRouter);
+router.use('/recipes', recipesRouter);
+router.use('/auth', authRouter);
+router.use('/ingredients', ingredientsRouter);
 
 export default router;

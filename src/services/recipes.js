@@ -1,5 +1,6 @@
 import { RecipesCollection } from '../models/recipe.js';
 import { User } from '../models/user.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 export const getAllRecipes = async ({
   page,
   perPage,
@@ -31,6 +32,13 @@ export const getAllRecipes = async ({
   const totalPages = Math.ceil(recipesCount / perPage);
 
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
+};
+
+export const createRecipe = async (payload) => {
+  return RecipesCollection.create(payload);
+};
+export const getRecipeById = async (recipeId) => {
+  return await RecipesCollection.findOne({ _id: recipeId });
 };
 
 export const getRecipesOwn = async (userId) => {

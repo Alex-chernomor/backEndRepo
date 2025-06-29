@@ -1,9 +1,15 @@
-import { UserCollection } from '../models/users.js';
+
 import createHttpError from 'http-errors';
+
+import { User } from '../models/user.js';
 
 export const getUserById = async (req, res, next) => {
   try {
+
     const { userId } = req.params;
+
+    const userId = req.user._id;
+    const user = await currentUser(userId, User);
 
     const user = await UserCollection.findById(userId).select('-password');
 

@@ -4,8 +4,11 @@ import {
   deleteFavorite,
   getAllFavorites,
   getAllRecipes,
+  getRecipeById,
   getRecipesOwn,
+  createRecipe,
 } from '../services/recipes.js';
+
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
@@ -25,6 +28,31 @@ export const getAllRecipesController = async (req, res) => {
   res.status(200).json({
     status: 200,
     data,
+  });
+};
+
+export const createRecipeController = async (req, res) => {
+  const data = await createRecipe({
+    ...req.body,
+    time: new Date(),
+    owner: req.user.id,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Recipe was created successfully',
+    data,
+  });
+};
+
+export const getRecipeByIdController = async (req, resp) => {
+  const { recipeId } = req.params;
+  const recipe = await getRecipeById(recipeId);
+
+  resp.status(200).json({
+    status: 200,
+    message: `Successfully found recipe by id!`,
+    data: recipe,
   });
 };
 
