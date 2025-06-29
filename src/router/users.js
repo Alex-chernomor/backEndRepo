@@ -16,7 +16,7 @@ import {
 const router = Router();
 const jsonParser = express.json();
 
-router.get('/:userId', getUserById);
+router.get('/:userId', auth, getUserById);
 
 router.post(
   '/favorites/:recipeId',
