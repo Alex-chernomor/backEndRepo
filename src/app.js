@@ -1,10 +1,22 @@
 import express from 'express';
-import { RecipesCollection } from './models/recipe.js';
 import cookieParser from 'cookie-parser';
 import usersRouter from './router/users.js';
+import pinoHttp from 'pino-http';
+
 const app = express();
 
 app.use(cookieParser());
+
+app.use(
+  pinoHttp({
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+      },
+    },
+  }),
+);
 
 app.use('/users', usersRouter);
 

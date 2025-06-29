@@ -32,6 +32,8 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
+  console.log('Body in controller: ', req.body);
+
   const data = await createRecipe({
     ...req.body,
     time: new Date(),
