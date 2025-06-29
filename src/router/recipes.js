@@ -1,13 +1,6 @@
-import { Router } from 'express';
-import {
-  getAllRecipesController,
-  createRecipeController,
-} from '../controllers/recipes.js';
-
 import express from 'express';
 import { isValidId } from '../middlewares/validateObjectId.js';
 import { auth } from '../middlewares/auth.js';
-import { Router } from 'express';
 import {
   addFavoriteController,
   deleteFavoriteController,
@@ -15,19 +8,20 @@ import {
   getAllRecipesController,
   getOwnRecipesController,
   getRecipeByIdController,
+  createRecipeController,
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { authenticate } from '../middlewares/authenticate.js';
+// import { authenticate } from '../middlewares/authenticate.js';
 
-const router = Router();
+const router = express.Router();
 const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
-router.get('/own', ctrlWrapper(getOwnRecipesController));
+router.get('/own', auth, ctrlWrapper(getOwnRecipesController));
 
 router.post(
   '/',

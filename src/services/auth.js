@@ -16,7 +16,7 @@ export const registerUser = async (payload) => {
   return await User.create(payload);
 };
 
-export async function loginUser() {
+export async function loginUser(email, password) {
   const user = await User.findOne({ email });
   if (user === null) {
     throw new createHttpError.Unauthorized('Email or password is incorrect');
@@ -32,8 +32,8 @@ export async function loginUser() {
     userId: user._id,
     accessToken,
     refreshToken,
-    accessTokenValidUntill: new Date(Date.now() + 15 * 60 * 60 * 1000),
-    refreshTokenValidUntill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 60 * 1000),
+    refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
 }
 
@@ -59,7 +59,7 @@ export async function refreshSession(sessionId, refreshToken) {
     userId: session.userId,
     accessToken: crypto.randomBytes(30).toString('base64'),
     refreshToken: crypto.randomBytes(30).toString('base64'),
-    accessTokenValidUntill: new Date(Date.now() + 15 * 60 * 60 * 1000),
-    refreshTokenValidUntill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 60 * 1000),
+    refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
 }
