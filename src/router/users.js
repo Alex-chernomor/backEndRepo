@@ -1,4 +1,7 @@
 import { Router } from 'express';
+
+import { getUserById } from '../controllers/users.js';
+
 import express from 'express';
 import { currentUserController } from '../controllers/users.js';
 import { auth } from '../middlewares/auth.js';
@@ -13,7 +16,7 @@ import {
 const router = Router();
 const jsonParser = express.json();
 
-router.get('/current', auth, currentUserController);
+router.get('/:userId', getUserById);
 
 router.post(
   '/favorites/:recipeId',
