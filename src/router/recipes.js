@@ -24,7 +24,7 @@ router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
 router.post(
   '/',
-  upload.single('recipeImg'),
+  upload.single('thumb'),
   jsonParser,
   auth,
   // validateBody(createRecipeSchema),
