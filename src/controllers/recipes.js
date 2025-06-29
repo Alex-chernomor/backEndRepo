@@ -1,5 +1,3 @@
-import { createRecipe, getAllRecipes } from '../services/recipes.js';
-
 import createHttpError from 'http-errors';
 import {
   addFavorite,
@@ -8,6 +6,7 @@ import {
   getAllRecipes,
   getRecipeById,
   getRecipesOwn,
+  createRecipe,
 } from '../services/recipes.js';
 
 import { parseFilterParams } from '../utils/parseFilterParams.js';
@@ -32,7 +31,6 @@ export const getAllRecipesController = async (req, res) => {
   });
 };
 
-=
 export const createRecipeController = async (req, res) => {
   const data = await createRecipe({
     ...req.body,
@@ -73,7 +71,6 @@ export const getOwnRecipesController = async (req, res, next) => {
     data: recipes,
   });
 };
-
 
 export const addFavoriteController = async (req, res) => {
   const favorite = await addFavorite(req.user.id, req.params.recipeId);
