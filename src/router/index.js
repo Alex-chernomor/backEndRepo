@@ -4,7 +4,7 @@ import usersRouter from './users.js';
 import recipesRouter from './recipes.js';
 import authRouter from './auth.js';
 import ingredientsRouter from './ingredients.js';
-import usersRouter from './users.js';
+// import usersRouter from './users.js';
 
 const router = Router();
 
