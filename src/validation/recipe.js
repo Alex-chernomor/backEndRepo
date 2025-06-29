@@ -6,7 +6,10 @@ export const createRecipeSchema = Joi.object({
     'string.max': 'Name should have at most 64 characters',
     'any.required': 'Name is required',
   }),
-  description: Joi.required(),
+  decr: Joi.string().max(200).required().messages({
+    'string.max': 'Description should have at most 200 characters',
+    'any.required': 'Description is required',
+  }),
   cookiesTime: Joi.string().min(1).max(360).required().messages({
     'string.min': 'Cookies time should be min 1 minute long',
     'string.max': 'Cookies time should be max 360 minutes long',
@@ -40,14 +43,10 @@ export const createRecipeSchema = Joi.object({
       'any.only':
         'Category type should be one of: Seafood, Lamb, Starter, Chicken, Beef, Dessert, Vegan, Pork, Vegetarian, Miscellaneous, Pasta, Breakfast, Side, Goat or Soup.',
     }),
+  //! ID одного інгредієнта з колекції Ingredient
   ingredient: Joi.string()
-    .required()
-      .custom((value, helper) => {
-          if () {
-        return
-          }
-          return;
-}),
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required(),
   ingredientAmount: Joi.string().min(2).max(16).required().messages({
     'string.min': 'Min 1 ingredient',
     'string.max': 'Max 360 ingredients',
