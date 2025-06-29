@@ -6,6 +6,8 @@ import {
   deleteFavorite,
   getAllFavorites,
   getAllRecipes,
+  getRecipeById,
+  getRecipesOwn,
 } from '../services/recipes.js';
 
 import { parseFilterParams } from '../utils/parseFilterParams.js';
@@ -30,6 +32,7 @@ export const getAllRecipesController = async (req, res) => {
   });
 };
 
+=
 export const createRecipeController = async (req, res) => {
   const data = await createRecipe({
     ...req.body,
@@ -43,6 +46,35 @@ export const createRecipeController = async (req, res) => {
     data,
   });
 };
+
+export const getRecipeByIdController = async (req, resp) => {
+  const { recipeId } = req.params;
+  const recipe = await getRecipeById(recipeId);
+
+  resp.status(200).json({
+    status: 200,
+    message: `Successfully found recipe by id!`,
+    data: recipe,
+  });
+};
+
+export const getOwnRecipesController = async (req, res, next) => {
+  const recipes = await getRecipesOwn({
+    owner: req.user._id,
+  });
+
+  if (!recipes) {
+    throw createHttpError(404, 'Own recipes not found');
+  }
+
+  res.json({
+    status: 200,
+    message: 'Successfully found own recipes!',
+    data: recipes,
+  });
+};
+
+
 export const addFavoriteController = async (req, res) => {
   const favorite = await addFavorite(req.user.id, req.params.recipeId);
 
