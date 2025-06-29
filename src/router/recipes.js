@@ -1,21 +1,24 @@
 import express from 'express';
 import { isValidId } from '../middlewares/validateObjectId.js';
 import { auth } from '../middlewares/auth.js';
-
+import { Router } from 'express';
 import {
   addFavoriteController,
   deleteFavoriteController,
   getAllFavoritesController,
   getAllRecipesController,
   getOwnRecipesController,
+  getRecipeByIdController,
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-const router = express.Router();
+const router = Router();
 const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getAllRecipesController));
+
+router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
 router.get('/own', ctrlWrapper(getOwnRecipesController));
 
@@ -37,7 +40,6 @@ router.delete(
 
 router.get(
   '/favorite',
-  // isValidId,
   jsonParser,
   auth,
   ctrlWrapper(getAllFavoritesController),

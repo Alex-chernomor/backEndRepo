@@ -65,4 +65,4 @@ const recipeSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
-export const RecipesCollection = model('recipes', recipeSchema);
+export const RecipesCollection = model('Recipe', recipeSchema);

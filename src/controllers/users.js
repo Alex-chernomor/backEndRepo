@@ -1,10 +1,10 @@
+import { User } from '../models/user.js';
 import { currentUser } from '../services/users.js';
-import { UserCollection } from '../models/users.js';
 
 export const currentUserController = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const user = await currentUser(userId, UserCollection);
+    const user = await currentUser(userId, User);
 
     res.status(200).json({
       status: 'success',
