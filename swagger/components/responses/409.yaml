@@ -1,4 +1,4 @@
-description: Unauthorized error
+description: Email in use
 content:
   application/json:
     schema:
@@ -10,10 +10,10 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 404
         message:
           type: string
-          example: UnauthorizedError
+          example: EmailInUse
         data:
           type: object
           required:
@@ -21,4 +21,4 @@ content:
           properties:
             message:
               type: string
-              example: Access token missing or expired!
+              example: 'This email is already in use'

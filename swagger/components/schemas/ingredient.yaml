@@ -1,0 +1,32 @@
+type: object
+required:
+  - _id
+  - name
+  - desc
+  - img
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Ingredient Id
+    example: 640c2dd963a319ea671e3804
+  name:
+    type: string
+    description: Name of the ingredient
+    example: Smoked Haddock
+  desc:
+    type: string
+    description: Description of the ingredient
+    example: Haddock that has been smoked over wood chips, giving it a distinctive smoky flavor
+  img:
+    type: string
+    format: url
+    description: Photo of the ingredient
+    example: https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e3804.png
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time

@@ -1,0 +1,34 @@
+tags:
+  - Categories
+summary: Get all recipe categories
+operationId: getCategories
+description: Get list of all available categories for recipe
+security: []
+responses:
+  '200':
+    description: Seccessfully fetched list of all recipe categories
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found all categories!
+            data:
+              type: array
+              items:
+                $ref: ../../components/schemas/category.yaml
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

@@ -1,4 +1,4 @@
-description: Unauthorized error
+description: Creates a recipe
 content:
   application/json:
     schema:
@@ -10,15 +10,10 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 201
         message:
           type: string
-          example: UnauthorizedError
+          example: Successfully created a recipe!
         data:
           type: object
-          required:
-            - message
-          properties:
-            message:
-              type: string
-              example: Access token missing or expired!
+          $ref: ../schemas/recipe.yaml
