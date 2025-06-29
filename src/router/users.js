@@ -14,8 +14,6 @@ import {
 
 const router = Router();
 
-router.get('/:userId', auth, getUserById);
-
 router.post(
   '/favorites/:recipeId',
   auth,
@@ -31,5 +29,7 @@ router.delete(
 );
 
 router.get('/favorites', auth, ctrlWrapper(getAllFavoritesController));
+
+router.get('/:userId', auth, getUserById);
 
 export default router;
