@@ -1,6 +1,6 @@
-import { model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-const ingredientsSchema = new Schema({
+const ingredientsSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
@@ -12,7 +12,7 @@ const ingredientsSchema = new Schema({
   },
 });
 
-const recipeSchema = new Schema(
+const recipeSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -40,14 +40,17 @@ const recipeSchema = new Schema(
       required: true,
     },
     owner: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     area: {
       type: String,
       required: false,
     },
-    instructions: { type: String, required: true },
+    instructions: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -59,10 +62,14 @@ const recipeSchema = new Schema(
     time: {
       type: String,
       required: true,
+      default: null,
     },
     ingredients: [ingredientsSchema],
   },
-  { timestamps: true, versionKey: false },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
-export const RecipesCollection = model('Recipe', recipeSchema);
+export const Recipe = mongoose.model('Recipe', recipeSchema);

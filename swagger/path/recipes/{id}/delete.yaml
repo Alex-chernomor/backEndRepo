@@ -1,0 +1,22 @@
+tags:
+  - Recipes
+summary: Delete own recipe by id
+operationId: deleteResipe
+description: Delete recipe by id
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: recipeId
+    required: true
+    schema:
+      type: string
+      example: 65ca67e7ae7f10c88b598384
+responses:
+  '204':
+    description: Deleted recipe by id
+    content: {}
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '404':
+    $ref: ../../../components/responses/404.yaml

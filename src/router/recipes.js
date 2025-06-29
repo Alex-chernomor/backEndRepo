@@ -3,12 +3,13 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { auth } from '../middlewares/auth.js';
 import {
   getAllRecipesController,
-  getOwnRecipesController,
+  // getOwnRecipesController,
   getRecipeByIdController,
   createRecipeController,
 } from '../controllers/recipes.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { upload } from '../middlewares/upload.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { createRecipeSchema } from '../validation/recipe.js';
 
@@ -19,15 +20,14 @@ router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
-router.get('/own', auth, ctrlWrapper(getOwnRecipesController));
+// router.get('/own', auth, ctrlWrapper(getOwnRecipesController)); // перенести в юзер
 
 router.post(
   '/',
-  isValidId,
+  upload.single('thumb'),
   jsonParser,
   auth,
-  validateBody(createRecipeSchema),
+  // validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
-
 export default router;

@@ -1,5 +1,7 @@
 import Joi from 'joi';
+
 import { isValidObjectId } from 'mongoose';
+
 export const createRecipeSchema = Joi.object({
   title: Joi.string().max(64).required().messages({
     'string.base': 'Title should be a string',
@@ -43,7 +45,7 @@ export const createRecipeSchema = Joi.object({
       'any.only':
         'Category type should be one of: Seafood, Lamb, Starter, Chicken, Beef, Dessert, Vegan, Pork, Vegetarian, Miscellaneous, Pasta, Breakfast, Side, Goat or Soup.',
     }),
-  //! ID одного інгредієнта з колекції Ingredient
+  // ID одного інгредієнта з колекції Ingredient
   //   ingredient: Joi.string()
   //     .required(),
   //   ingredientAmount: Joi.string().min(2).max(16).required().messages({

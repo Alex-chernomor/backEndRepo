@@ -1,0 +1,18 @@
+type: object
+required:
+  - name
+  - email
+  - password
+properties:
+  name:
+    type: string
+    description: User's name
+    example: John Doe
+  email:
+    type: string
+    description: User's email address
+    example: john.doe@mail.com
+  password:
+    type: string
+    description: User's password
+    example: SuperStar2025$
