@@ -1,6 +1,9 @@
 import Joi from 'joi';
+
 import { isValidObjectId } from 'mongoose';
+
 export const createRecipeSchema = Joi.object({
+  
   name: Joi.string().max(64).required().messages({
     'string.base': 'Name should be a string',
     'string.max': 'Name should have at most 64 characters',
