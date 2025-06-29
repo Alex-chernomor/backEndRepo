@@ -11,7 +11,7 @@ export const auth = async (req, res, next) => {
     return;
   }
 
-  const [bearer, accessToken] = authorization.split(' ', 2);
+  const [bearer, accessToken] = authHeader.split(' ', 2);
 
   if (bearer !== 'Bearer' || typeof accessToken !== 'string') {
     return next(

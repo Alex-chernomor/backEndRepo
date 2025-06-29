@@ -32,7 +32,7 @@ router.post(
 );
 
 router.post(
-  '/favorite/:recipeId',
+  '/favorites/:recipeId',
   isValidId,
   jsonParser,
   auth,
@@ -40,7 +40,7 @@ router.post(
 );
 
 router.delete(
-  '/favorite/:recipeId',
+  '/favorites/:recipeId',
   isValidId,
   jsonParser,
   auth,
@@ -48,7 +48,7 @@ router.delete(
 );
 
 router.get(
-  '/favorite',
+  '/favorites',
   jsonParser,
   auth,
   ctrlWrapper(getAllFavoritesController),
