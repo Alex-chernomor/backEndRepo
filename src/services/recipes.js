@@ -1,5 +1,6 @@
 import { RecipesCollection } from '../models/recipe.js';
 import { User } from '../models/user.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 export const getAllRecipes = async ({
   page,
   perPage,
@@ -33,10 +34,9 @@ export const getAllRecipes = async ({
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
 
-
 export const createRecipe = async (payload) => {
   return RecipesCollection.create(payload);
-}
+};
 export const getRecipeById = async (recipeId) => {
   return await RecipesCollection.findOne({ _id: recipeId });
 };
@@ -44,7 +44,6 @@ export const getRecipeById = async (recipeId) => {
 export const getRecipesOwn = async (userId) => {
   const recipes = await RecipesCollection.find({ owner: userId });
   return recipes;
-
 };
 
 export const addFavorite = async (userId, recipeId) => {

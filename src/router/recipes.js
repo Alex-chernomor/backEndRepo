@@ -2,9 +2,6 @@ import express from 'express';
 import { isValidId } from '../middlewares/validateObjectId.js';
 import { auth } from '../middlewares/auth.js';
 import {
-  addFavoriteController,
-  deleteFavoriteController,
-  getAllFavoritesController,
   getAllRecipesController,
   getOwnRecipesController,
   getRecipeByIdController,
@@ -29,29 +26,6 @@ router.post(
   jsonParser,
   auth,
   ctrlWrapper(createRecipeController),
-);
-
-router.post(
-  '/favorites/:recipeId',
-  isValidId,
-  jsonParser,
-  auth,
-  ctrlWrapper(addFavoriteController),
-);
-
-router.delete(
-  '/favorites/:recipeId',
-  isValidId,
-  jsonParser,
-  auth,
-  ctrlWrapper(deleteFavoriteController),
-);
-
-router.get(
-  '/favorites',
-  jsonParser,
-  auth,
-  ctrlWrapper(getAllFavoritesController),
 );
 
 export default router;
