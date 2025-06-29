@@ -83,8 +83,8 @@ export const getAllFavorites = async (userId) => {
   const favoriteRecipes = { _id: { $in: favoriteIds } };
 
   const [recipesCount, recipes] = await Promise.all([
-    RecipesCollection.countDocuments(favoriteRecipes),
-    RecipesCollection.find(favoriteRecipes)
+    Recipe.countDocuments(favoriteRecipes),
+    Recipe.find(favoriteRecipes)
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder }),
