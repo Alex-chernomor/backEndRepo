@@ -17,8 +17,8 @@ async function bootstrap() {
     await initMongoConnection();
 
     app.use(express.json());
-    app.use('/api',router);
-    
+    app.use('/api', router);
+
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',
