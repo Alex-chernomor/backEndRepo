@@ -1,3 +1,6 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
 import createHttpError from 'http-errors';
 import {
   addFavorite,
@@ -9,8 +12,10 @@ import {
   createRecipe,
 } from '../services/recipes.js';
 
+import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -32,16 +37,36 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
-  const data = await createRecipe({
-    ...req.body,
-    time: new Date(),
-    owner: req.user.id,
-  });
+  let thumb = null;
 
-  res.status(200).json({
-    status: 200,
-    message: 'Recipe was created successfully',
-    data,
+  const uploadToCloudinarySwitcher = getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
+
+  if (uploadToCloudinarySwitcher) {
+    const result = await uploadToCloudinary(req.file.path);
+    await fs.unlink(req.file.path);
+
+    thumb = result.secure_url;
+  } else {
+    await fs.rename(
+      req.file.path,
+      path.resolve('src', 'uploads', 'photos', req.file.filename),
+    );
+
+    thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
+  }
+
+  const recipeData = {
+    ...req.body,
+    owner: req.user._id,
+    thumb,
+  };
+
+  const recipe = await createRecipe(recipeData);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Recipe created successfully',
+    data: recipe,
   });
 };
 
