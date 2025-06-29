@@ -1,0 +1,67 @@
+type: object
+required:
+  - _id
+  - title
+  - category
+  - owner
+  - instructions
+  - description
+  - time
+  - ingredients
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Recipe id
+    example: 507f1f77bcf86cd799439011
+  title:
+    type: string
+    description: Recipe title
+    example: Callaloo Jamaican Style
+  category:
+    type: string
+    description: Recipe category
+    example: Soup
+  owner:
+    type: string
+    description: Recipe owner's Id
+    example: 6592008029c8c3e4dc76256c
+  area:
+    type: string
+    description: Recipe origin area
+    example: British
+  instructions:
+    type: string
+    description: Recipe instructions
+    example: Heat oven to 160C/fan 140C/gas 3. Heat some dripping or butter in a large shallow casserole dish, brown the lamb in batches...
+  description:
+    type: string
+    description: Recipe description
+    example: A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds.
+  thumb:
+    type: string
+    format: url
+    description: Recipe photo url
+    example: https://res.cloudinary.com/dvda8nxai/image/upload/v1749381064/b7hiztxuoqgaauryqleh.jpg
+  time:
+    type: string
+    description: Cooking time in minutes
+    example: 45
+  ingredients:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 640c2dd963a319ea671e3687
+        measure:
+          type: string
+          example: '2 cups'
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
