@@ -39,7 +39,8 @@ export const getAllRecipesController = async (req, res) => {
 export const createRecipeController = async (req, res) => {
   let thumb = null;
 
-  const uploadToCloudinarySwitcher = getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
+  const uploadToCloudinarySwitcher =
+    getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
 
   if (uploadToCloudinarySwitcher) {
     const result = await uploadToCloudinary(req.file.path);
@@ -55,8 +56,21 @@ export const createRecipeController = async (req, res) => {
     thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
   }
 
+  let ingredients = req.body.ingredients;
+  // Розпарсимо ingredients, якщо це рядок (а не вже масив)
+  if (typeof ingredients === 'string') {
+    try {
+      ingredients = JSON.parse(ingredients);
+    } catch (error) {
+      return res.status(400).json({
+        message: 'Invalid JSON format in ingredients field',
+      });
+    }
+  }
+
   const recipeData = {
     ...req.body,
+    ingredients,
     owner: req.user._id,
     thumb,
   };
