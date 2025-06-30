@@ -42,7 +42,6 @@ export const getRecipeById = async (recipeId) => {
 };
 
 export const getRecipesOwn = async (userId) => {
-
   const page = 1;
   const perPage = 12;
   const sortBy = 'createdAt';
@@ -68,7 +67,6 @@ export const getRecipesOwn = async (userId) => {
     data: recipes,
     ...paginationData,
   };
-
 };
 
 export const addFavorite = async (userId, recipeId) => {
