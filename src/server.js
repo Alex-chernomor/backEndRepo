@@ -30,16 +30,13 @@ async function bootstrap() {
     app.use(notFoundHandler);
     app.use(errorHandler);
 
-    // app.listen(PORT, (error) => {
-    //   if (error) {
-    //     throw error;
-    //   }
-    //   console.log(`Server started on port ${PORT}`);
-    // });
-
-    app.listen(PORT, () => {
+    app.listen(PORT, (error) => {
+      if (error) {
+        throw error;
+      }
       console.log(`Server started on port ${PORT}`);
     });
+
   } catch (error) {
     console.error(error);
   }
