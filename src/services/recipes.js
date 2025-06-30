@@ -1,4 +1,3 @@
-// import { RecipesCollection } from '../models/recipe.js';
 import { User } from '../models/user.js';
 import { Recipe } from '../models/recipe.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
@@ -43,7 +42,6 @@ export const getRecipeById = async (recipeId) => {
 };
 
 export const getRecipesOwn = async (userId) => {
-
   const page = 1;
   const perPage = 12;
   const sortBy = 'createdAt';
@@ -53,11 +51,11 @@ export const getRecipesOwn = async (userId) => {
   const skip = (page - 1) * perPage;
 
   const user = await User.findById(userId);
-  if (!user) throw new Error('User not found');
+  if (!User) throw new Error('User not found');
 
   const [recipesCount, recipes] = await Promise.all([
-    RecipesCollection.countDocuments({ owner: userId }),
-    RecipesCollection.find({ owner: userId })
+    Recipe.countDocuments({ owner: userId }),
+    Recipe.find({ owner: userId })
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder }),
@@ -69,10 +67,6 @@ export const getRecipesOwn = async (userId) => {
     data: recipes,
     ...paginationData,
   };
-
-  const recipes = await Recipe.find({ owner: userId });
-  return recipes;
-
 };
 
 export const addFavorite = async (userId, recipeId) => {
