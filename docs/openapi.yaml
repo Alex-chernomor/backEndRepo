@@ -23,6 +23,9 @@ paths:
   /api/auth/logout:
     post:
       $ref: ../swagger/path/auth/logout/post.yaml
+  /api/auth/refresh:
+    post:
+      $ref: ../swagger/path/auth/logout/post.yaml
 
   /api/users/{userId}:
     get:
