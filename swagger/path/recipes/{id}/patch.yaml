@@ -1,0 +1,39 @@
+tags:
+  - Recipes
+summary: Patch recipe by id
+operationId: patchRecipe
+description: 'Patch recipe by id'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: recipeId
+    required: true
+    schema:
+      type: string
+      example: '65ca67e7ae7f10c88b598384'
+responses:
+  '200':
+    description: 'Successfully pached recipe by id'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully pached recipe with id 65ca67e7ae7f10c88b598384!
+            data:
+              type: object
+              $ref: ../../../components/schemas/recipe.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '404':
+    $ref: ../../../components/responses/404.yaml

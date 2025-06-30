@@ -1,5 +1,6 @@
-import { RecipesCollection } from '../models/recipe.js';
+// import { RecipesCollection } from '../models/recipe.js';
 import { User } from '../models/user.js';
+import { Recipe } from '../models/recipe.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 export const getAllRecipes = async ({
   page,
@@ -10,9 +11,8 @@ export const getAllRecipes = async ({
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
-  console.log(ingredientId);
 
-  const recipesQuery = RecipesCollection.find();
+  const recipesQuery = Recipe.find();
 
   if (category) {
     recipesQuery.where('category').equals(category);
@@ -25,7 +25,7 @@ export const getAllRecipes = async ({
   }
 
   const [recipesCount, recipes] = await Promise.all([
-    RecipesCollection.find().merge(recipesQuery).countDocuments(),
+    Recipe.find().merge(recipesQuery).countDocuments(),
     recipesQuery.skip(skip).limit(limit).exec(),
   ]);
 
@@ -34,14 +34,16 @@ export const getAllRecipes = async ({
   return { data: recipes, total: recipesCount, page, perPage, totalPages };
 };
 
-export const createRecipe = async (payload) => {
-  return RecipesCollection.create(payload);
-};
+export function createRecipe(payload) {
+  return Recipe.create(payload);
+}
+
 export const getRecipeById = async (recipeId) => {
-  return await RecipesCollection.findOne({ _id: recipeId });
+  return await Recipe.findOne({ _id: recipeId });
 };
 
 export const getRecipesOwn = async (userId) => {
+
   const page = 1;
   const perPage = 12;
   const sortBy = 'createdAt';
@@ -67,6 +69,10 @@ export const getRecipesOwn = async (userId) => {
     data: recipes,
     ...paginationData,
   };
+
+  const recipes = await Recipe.find({ owner: userId });
+  return recipes;
+
 };
 
 export const addFavorite = async (userId, recipeId) => {
@@ -105,8 +111,8 @@ export const getAllFavorites = async (userId) => {
   const favoriteRecipes = { _id: { $in: favoriteIds } };
 
   const [recipesCount, recipes] = await Promise.all([
-    RecipesCollection.countDocuments(favoriteRecipes),
-    RecipesCollection.find(favoriteRecipes)
+    Recipe.countDocuments(favoriteRecipes),
+    Recipe.find(favoriteRecipes)
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder }),

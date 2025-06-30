@@ -1,31 +1,151 @@
+# Anastasiia Skliarovska
+
 tags:
-  - Categories
-summary: Get all recipe categories
-operationId: getCategories
+  - Recipes
+summary: Get all recipes
+operationId: getRecipes
+description: Get list of all recipes with optional filters by category, ingredient, and search query.
+security: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      example: 1
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      example: 10
+  - in: query
+    name: query
+    schema:
+      type: string
+      example: Callaloo Jamaican Style
+  - in: query
+    name: category
+    schema:
+      type: string
+      enum:
+        [
+          'Seafood',
+          'Lamb',
+          'Starter',
+          'Chicken',
+          'Beef',
+          'Dessert',
+          'Vegan',
+          'Pork',
+          'Vegetarian',
+          'Miscellaneous',
+          'Pasta',
+          'Breakfast',
+          'Side',
+          'Goat',
+          'Soup',
+        ]
+      example: Soup
+  - in: query
+    name: ingredient
+    schema:
+      type: string
+      example: 640c2dd963a319ea671e370c
 responses:
   '200':
-    description: Successful operation. Returns an array of categories.
+    description: Successfuly get all recipes list
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/category.yaml
+          type: object
+          required:
+            - status
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            data:
+              type: object
+              required:
+                - data
+                - total
+                - page
+                - perPage
+                - totalPages
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/recipe.yaml'
+                _id:
+                  type: string
+                  description: Recipe id
+                  example: 507f1f77bcf86cd799439011
+                title:
+                  type: string
+                  description: Recipe title
+                  example: Callaloo Jamaican Style
+                category:
+                  type: string
+                  description: Recipe category
+                  example: Soup
+                owner:
+                  type: string
+                  description: Recipe owner
+                  example: 6592008029c8c3e4dc76256c
+                area:
+                  type: string
+                  description: Recipe area
+                  example: British
+                instructions:
+                  type: string
+                  description: Recipe instructions
+                  example: Heat oven to 160C/fan 140C/gas 3. Heat some dripping or butter in a large shallow casserole dish, brown the lamb in batches...
+                description:
+                  type: string
+                  description: Recipe description
+                  example: A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds.
+                thumb:
+                  type: string
+                  format: url
+                  description: Recipe photo url
+                  example: https://res.cloudinary.com/dvda8nxai/image/upload/v1749381064/b7hiztxuoqgaauryqleh.jpg
+                time:
+                  type: string
+                  description: Cooking time in minutes
+                  example: 45
+                ingredients:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 640c2dd963a319ea671e3687
+                      measure:
+                        type: string
+                        example: '2 cups'
+                createdAt:
+                  type: string
+                  format: date-time
+                updatedAt:
+                  type: string
+                  format: date-time
+            total:
+              type: integer
+              example: 120
+            page:
+              type: integer
+              example: 1
+            perPage:
+              type: integer
+              example: 10
+            totalPages:
+              type: integer
+              example: 12
   '400':
-    description: Bad request
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Bad request
+    $ref: ../../components/responses/400.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
   '500':
-    description: Server error
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Internal server error
+    $ref: ../../components/responses/500.yaml

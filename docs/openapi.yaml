@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Tasteorama
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: This is a documentation of Recipes Book App.
+tags:
+  - name: Testeorama Recipes App
+    description: Operations about recipes.
+  - name: Auth
+    description: Auth operations.
+servers:
+  - url: https://backendrepo-ormv.onrender.com
+paths:
+  /api/auth/register:
+    post:
+      $ref: '../swagger/path/auth/register/post.yaml'
+  /api/auth/login:
+    post:
+      $ref: ../swagger/path/auth/login/post.yaml
+  /api/auth/logout:
+    post:
+      $ref: ../swagger/path/auth/logout/post.yaml
+  /api/auth/refresh:
+    post:
+      $ref: ../swagger/path/auth/logout/post.yaml
+
+  /api/users/{userId}:
+    get:
+      $ref: ../swagger/path/users/{userId}/get.yaml
+  /api/users/{userId}/favorites:
+    get:
+      $ref: ../swagger/path/users/{userId}/favorites/get.yaml
+  /api/users/{userId}/favorites/{recipeId}:
+    post:
+      $ref: ../swagger/path/users/{userId}/favorites/{recipeId}/post.yaml
+    delete:
+      $ref: ../swagger/path/users/{userId}/favorites/{recipeId}/delete.yaml
+
+  /api/users/{userId}/own:
+    get:
+      $ref: ../swagger/path/users/{userId}/own/get.yaml
+    post:
+      $ref: ../swagger/path/users/{userId}/own/post.yaml
+  /api/users/{userId}/own/{recipeId}:
+    delete:
+      $ref: ../swagger/path/users/{userId}/own/{recipeId}/delete.yaml
+
+  /api/recipes:
+    get:
+      $ref: ../swagger/path/recipes/get.yaml
+    post:
+      $ref: ../swagger/path/recipes/post.yaml
+  /api/recipes/{recipeId}:
+    get:
+      $ref: ../swagger/path/recipes/{id}/get.yaml
+    patch:
+      $ref: ../swagger/path/recipes/{id}/patch.yaml
+    delete:
+      $ref: ../swagger/path/recipes/{id}/delete.yaml
+  # /api/recipes/favorites:
+  #   get:
+  #     $ref: ../swagger/path/recipes/favorites/get.yaml
+  # /api/recipes/favorites/{recipeId}:
+  #   post:
+  #     $ref: ../swagger/path/recipes/favorites/{id}/post.yaml
+  #   delete:
+  #     $ref: ../swagger/path/recipes/favorites/{id}/delete.yaml
+
+  /api/categories:
+    get:
+      $ref: ../swagger/path/categories/get.yaml
+
+  /api/ingredients:
+    get:
+      $ref: ../swagger/path/ingredients/get.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

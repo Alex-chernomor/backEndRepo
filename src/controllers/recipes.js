@@ -1,3 +1,6 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
 import createHttpError from 'http-errors';
 import {
   addFavorite,
@@ -9,8 +12,10 @@ import {
   createRecipe,
 } from '../services/recipes.js';
 
+import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -32,16 +37,50 @@ export const getAllRecipesController = async (req, res) => {
 };
 
 export const createRecipeController = async (req, res) => {
-  const data = await createRecipe({
-    ...req.body,
-    time: new Date(),
-    owner: req.user.id,
-  });
+  let thumb = null;
 
-  res.status(200).json({
-    status: 200,
-    message: 'Recipe was created successfully',
-    data,
+  const uploadToCloudinarySwitcher =
+    getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
+
+  if (uploadToCloudinarySwitcher) {
+    const result = await uploadToCloudinary(req.file.path);
+    await fs.unlink(req.file.path);
+
+    thumb = result.secure_url;
+  } else {
+    await fs.rename(
+      req.file.path,
+      path.resolve('src', 'uploads', 'photos', req.file.filename),
+    );
+
+    thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
+  }
+
+  let ingredients = req.body.ingredients;
+  // Розпарсимо ingredients, якщо це рядок (а не вже масив)
+  if (typeof ingredients === 'string') {
+    try {
+      ingredients = JSON.parse(ingredients);
+    } catch (error) {
+      return res.status(400).json({
+        message: 'Invalid JSON format in ingredients field',
+      });
+    }
+  }
+
+  const recipeData = {
+    ...req.body,
+    ingredients,
+    owner: req.user._id,
+    thumb,
+  };
+
+  const recipe = await createRecipe(recipeData);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Recipe created successfully',
+    data: recipe,
   });
 };
 
@@ -67,7 +106,7 @@ export const getOwnRecipesController = async (req, res, next) => {
 };
 
 export const addFavoriteController = async (req, res) => {
-  const favorite = await addFavorite(req.user.id, req.params.recipeId);
+  const favorite = await addFavorite(req.user._id, req.params.recipeId);
 
   res.status(201).json({
     status: 201,
@@ -79,18 +118,21 @@ export const addFavoriteController = async (req, res) => {
 export const deleteFavoriteController = async (req, res, next) => {
   const { recipeId } = req.params;
 
-  const favourite = await deleteFavorite(req.user.id, recipeId);
+  const favourite = await deleteFavorite(req.user._id, recipeId);
 
   if (!favourite) {
     next(createHttpError(404, 'Recipe not found'));
     return;
   }
 
-  res.status(204).send();
+  res.status(200).json({
+    status: 200,
+    message: `Recipe with id ${recipeId} was successfully removed from favorites`,
+  });
 };
 
 export const getAllFavoritesController = async (req, res) => {
-  const favorites = await getAllFavorites(req.user.id);
+  const favorites = await getAllFavorites(req.user._id);
 
   res.status(200).json({
     status: 200,

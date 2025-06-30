@@ -7,6 +7,7 @@ import cors from 'cors';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './router/index.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 async function bootstrap() {
   try {
@@ -19,6 +20,8 @@ async function bootstrap() {
     app.use(express.json());
     app.use('/api', router);
 
+    app.use('/api-docs', swaggerDocs());
+
     app.get('/', (req, res) => {
       res.json({
         message: 'Wellcome!',
@@ -27,10 +30,14 @@ async function bootstrap() {
     app.use(notFoundHandler);
     app.use(errorHandler);
 
-    app.listen(PORT, (error) => {
-      if (error) {
-        throw error;
-      }
+    // app.listen(PORT, (error) => {
+    //   if (error) {
+    //     throw error;
+    //   }
+    //   console.log(`Server started on port ${PORT}`);
+    // });
+
+    app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });
   } catch (error) {

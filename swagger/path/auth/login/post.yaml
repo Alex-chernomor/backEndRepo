@@ -1,0 +1,45 @@
+tags:
+  - Auth
+summary: User login
+operationId: loginUser
+description: User authentication
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../../components/schemas/userLogin.yaml
+responses:
+  '200':
+    description: Successfully authenticated user
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - token
+            - user
+          properties:
+            status:
+              type: integer
+              example: 200
+            token:
+              type: string
+              description: JWT access token
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+            user:
+              $ref: ../../../components/schemas/user.yaml
+  '400':
+    description: Invalid email or password
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Invalid email or password
+  '500':
+    $ref: ../../../components/responses/500.yaml
