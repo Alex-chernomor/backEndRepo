@@ -96,7 +96,7 @@ export const getRecipeByIdController = async (req, resp) => {
 };
 
 export const getOwnRecipesController = async (req, res, next) => {
-  const own = await getRecipesOwn(req.user.id);
+  const own = await getRecipesOwn(req.user._id);
 
   res.json({
     status: 200,

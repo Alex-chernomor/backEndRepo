@@ -1,22 +1,26 @@
 import { User } from '../models/user.js';
-// import { currentUser } from '../services/users.js';
 
-import '../models/recipe.js';
+export const currentUserController = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
 
-export const currentUserController = async (req, res) => {
-  const user = await User.findById(req.user._id)
-    .populate('favorites')
-    .populate('myRecipes');
+    const user = await User.findById(_id)
+      .populate('favorites', 'title category thumb')
+      .populate('own', 'title category thumb');
 
-  res.status(200).json({
-    status: 200,
-    message: 'User info retrieved successfully',
-    data: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      favorites: user.favorites,
-      myRecipes: user.myRecipes,
-    },
-  });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: 'User not found' });
+    }
+
+    res.json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
