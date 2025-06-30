@@ -56,8 +56,8 @@ export const getRecipesOwn = async (userId) => {
   if (!user) throw new Error('User not found');
 
   const [recipesCount, recipes] = await Promise.all([
-    RecipesCollection.countDocuments({ owner: userId }),
-    RecipesCollection.find({ owner: userId })
+    Recipe.countDocuments({ owner: userId }),
+    Recipe.find({ owner: userId })
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder }),
@@ -69,9 +69,6 @@ export const getRecipesOwn = async (userId) => {
     data: recipes,
     ...paginationData,
   };
-
-  const recipes = await Recipe.find({ owner: userId });
-  return recipes;
 
 };
 
