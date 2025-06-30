@@ -12,6 +12,7 @@ import {
   createRecipe,
 } from '../services/recipes.js';
 
+import { User } from '../models/user.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
@@ -45,19 +46,16 @@ export const createRecipeController = async (req, res) => {
   if (uploadToCloudinarySwitcher) {
     const result = await uploadToCloudinary(req.file.path);
     await fs.unlink(req.file.path);
-
     thumb = result.secure_url;
   } else {
     await fs.rename(
       req.file.path,
       path.resolve('src', 'uploads', 'photos', req.file.filename),
     );
-
     thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
   }
 
   let ingredients = req.body.ingredients;
-  // Розпарсимо ingredients, якщо це рядок (а не вже масив)
   if (typeof ingredients === 'string') {
     try {
       ingredients = JSON.parse(ingredients);
@@ -76,6 +74,8 @@ export const createRecipeController = async (req, res) => {
   };
 
   const recipe = await createRecipe(recipeData);
+
+  await User.findByIdAndUpdate(req.user._id, { $push: { own: recipe._id } });
 
   res.status(201).json({
     status: 201,

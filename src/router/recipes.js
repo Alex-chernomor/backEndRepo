@@ -22,10 +22,6 @@ router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
-
-// router.get('/own', auth, ctrlWrapper(getOwnRecipesController)); // перенести в юзер
-
-
 router.post(
   '/',
   upload.single('thumb'),
