@@ -30,10 +30,14 @@ async function bootstrap() {
     app.use(notFoundHandler);
     app.use(errorHandler);
 
+<<<<<<< Updated upstream
     app.listen(PORT, (error) => {
       if (error) {
         throw error;
       }
+=======
+    app.listen(PORT, () => {
+>>>>>>> Stashed changes
       console.log(`Server started on port ${PORT}`);
     });
 

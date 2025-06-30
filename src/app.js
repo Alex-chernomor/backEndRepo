@@ -13,7 +13,6 @@ app.use('/photos', express.static(path.resolve('src', 'uploads', 'photos')));
 
 app.use(cookieParser());
 
-
 app.use(express.json());
 app.use('/api', router);
 
@@ -27,7 +26,6 @@ app.use(
     },
   }),
 );
-
 
 app.use('/users', usersRouter);
 

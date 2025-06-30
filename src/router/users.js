@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { getUserById } from '../controllers/users.js';
 
-import express from 'express';
+// import express from 'express';
 import { auth } from '../middlewares/auth.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
