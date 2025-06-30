@@ -3,7 +3,6 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { auth } from '../middlewares/auth.js';
 import {
   getAllRecipesController,
-  getOwnRecipesController,
   getRecipeByIdController,
   createRecipeController,
 } from '../controllers/recipes.js';
@@ -16,8 +15,6 @@ const jsonParser = express.json();
 router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
-
-router.get('/own', auth, ctrlWrapper(getOwnRecipesController));
 
 router.post(
   '/',

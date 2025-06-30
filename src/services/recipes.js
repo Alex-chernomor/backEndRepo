@@ -42,8 +42,31 @@ export const getRecipeById = async (recipeId) => {
 };
 
 export const getRecipesOwn = async (userId) => {
-  const recipes = await RecipesCollection.find({ owner: userId });
-  return recipes;
+  const page = 1;
+  const perPage = 12;
+  const sortBy = 'createdAt';
+  const sortOrder = -1;
+
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
+
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const [recipesCount, recipes] = await Promise.all([
+    RecipesCollection.countDocuments({ owner: userId }),
+    RecipesCollection.find({ owner: userId })
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder }),
+  ]);
+
+  const paginationData = calculatePaginationData(recipesCount, perPage, page);
+
+  return {
+    data: recipes,
+    ...paginationData,
+  };
 };
 
 export const addFavorite = async (userId, recipeId) => {

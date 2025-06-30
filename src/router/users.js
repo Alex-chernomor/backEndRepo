@@ -8,12 +8,15 @@ import {
   addFavoriteController,
   deleteFavoriteController,
   getAllFavoritesController,
+  getOwnRecipesController,
 } from '../controllers/recipes.js';
 
 const router = Router();
 const jsonParser = express.json();
 
 router.get('/current', auth, currentUserController);
+
+router.get('/own', auth, ctrlWrapper(getOwnRecipesController));
 
 router.post(
   '/favorites/:recipeId',
