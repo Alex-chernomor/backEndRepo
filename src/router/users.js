@@ -1,8 +1,7 @@
 import { Router } from 'express';
 
-import { getUserById } from '../controllers/users.js';
+import { currentUserController } from '../controllers/users.js';
 
-import express from 'express';
 import { auth } from '../middlewares/auth.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
@@ -33,6 +32,6 @@ router.delete(
 
 router.get('/favorites', auth, ctrlWrapper(getAllFavoritesController));
 
-router.get('/:userId', auth, getUserById);
+router.get('/current', auth, currentUserController);
 
 export default router;
