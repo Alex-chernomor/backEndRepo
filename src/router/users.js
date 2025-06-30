@@ -10,9 +10,12 @@ import {
   addFavoriteController,
   deleteFavoriteController,
   getAllFavoritesController,
+  getOwnRecipesController,
 } from '../controllers/recipes.js';
 
 const router = Router();
+
+router.get('/own', auth, ctrlWrapper(getOwnRecipesController));
 
 router.post(
   '/favorites/:recipeId',

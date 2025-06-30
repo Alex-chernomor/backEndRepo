@@ -96,18 +96,12 @@ export const getRecipeByIdController = async (req, resp) => {
 };
 
 export const getOwnRecipesController = async (req, res, next) => {
-  const recipes = await getRecipesOwn({
-    owner: req.user._id,
-  });
-
-  if (!recipes) {
-    throw createHttpError(404, 'Own recipes not found');
-  }
+  const own = await getRecipesOwn(req.user.id);
 
   res.json({
     status: 200,
     message: 'Successfully found own recipes!',
-    data: recipes,
+    data: own,
   });
 };
 

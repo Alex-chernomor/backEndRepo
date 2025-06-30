@@ -3,7 +3,9 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { auth } from '../middlewares/auth.js';
 import {
   getAllRecipesController,
+
   // getOwnRecipesController,
+
   getRecipeByIdController,
   createRecipeController,
 } from '../controllers/recipes.js';
@@ -20,7 +22,9 @@ router.get('/', ctrlWrapper(getAllRecipesController));
 
 router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 
+
 // router.get('/own', auth, ctrlWrapper(getOwnRecipesController)); // перенести в юзер
+
 
 router.post(
   '/',
