@@ -11,8 +11,13 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 async function bootstrap() {
   try {
-    app.use(cors());
-
+    app.use(
+      cors({
+        origin: 'http://localhost:5173', //або потім масив дозволених доменів. Цей і домен фронтенду на Render
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        credentials: true,
+      }),
+    );
     const PORT = getEnvVar('PORT');
 
     await initMongoConnection();
@@ -36,7 +41,6 @@ async function bootstrap() {
       }
       console.log(`Server started on port ${PORT}`);
     });
-
   } catch (error) {
     console.error(error);
   }
