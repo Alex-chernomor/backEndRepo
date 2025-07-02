@@ -27,24 +27,24 @@ paths:
     post:
       $ref: ../swagger/path/auth/logout/post.yaml
 
-  /api/users/{userId}:
+  /api/users/current:
     get:
-      $ref: ../swagger/path/users/{userId}/get.yaml
-  /api/users/{userId}/favorites:
+      $ref: ../swagger/path/users/current/get.yaml
+  /api/users/favorites:
     get:
-      $ref: ../swagger/path/users/{userId}/favorites/get.yaml
-  /api/users/{userId}/favorites/{recipeId}:
+      $ref: ../swagger/path/users/favorites/get.yaml
+  /api/users/favorites/{recipeId}:
     post:
-      $ref: ../swagger/path/users/{userId}/favorites/{recipeId}/post.yaml
+      $ref: ../swagger/path/users/favorites/{recipeId}/post.yaml
     delete:
-      $ref: ../swagger/path/users/{userId}/favorites/{recipeId}/delete.yaml
+      $ref: ../swagger/path/users/favorites/{recipeId}/delete.yaml
 
-  /api/users/{userId}/own:
+  /api/users/own:
     get:
       $ref: ../swagger/path/users/{userId}/own/get.yaml
     post:
       $ref: ../swagger/path/users/{userId}/own/post.yaml
-  /api/users/{userId}/own/{recipeId}:
+  /api/users/own/{recipeId}:
     delete:
       $ref: ../swagger/path/users/{userId}/own/{recipeId}/delete.yaml
 
