@@ -1,3 +1,5 @@
+// import { getAllIngredients } from '../services/ingredients.js';
+
 const parseCategory = (category) => {
   if (typeof category !== 'string') return;
 
