@@ -6,8 +6,13 @@ properties:
   email:
     type: string
     format: email
+    maxLength: 128
+    description: Valid email required
     example: john.doe@examplemail.com
   password:
     type: string
+    minLength: 8
+    maxLength: 128
     format: password
+    description: Password must be between 8 and 128 characters
     example: SuperStar2025$

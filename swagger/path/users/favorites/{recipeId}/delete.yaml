@@ -1,27 +1,21 @@
 tags:
   - Users
-summary: Delete own recipe
-operationId: deleteOwnResipe
-description: Delete user's own recipe
+summary: Remove recipe from favorites list
+operationId: removeFavoriteResipe
+description: Delete recipe from users favorites list
 security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: userId
-    required: true
-    schema:
-      type: string
-      example: '64c8d958249fae54bae90bb9'
-  - in: path
     name: recipeId
     required: true
-    description: ID of the recipe to remove from own recipes list
+    description: ID of the recipe to remove from favorites
     schema:
       type: string
       example: 6462a8f74c3d0ddd28897fcd
 responses:
   '200':
-    description: Successfully deleted recipe!
+    description: Successfully removed recipe from favorites
     content:
       application/json:
         schema:
@@ -32,11 +26,11 @@ responses:
               example: 200
             message:
               type: string
-              example: Recipe was seccessfully deleted!
+              example: Recipe removed from favorites
   '401':
-    $ref: ../../../../../components/responses/401.yaml
+    $ref: ../../../../components/responses/401.yaml
   '404':
-    description: Recipe not found
+    description: Recipe not found in favorites
     content:
       application/json:
         schema:
@@ -51,7 +45,7 @@ responses:
               example: 401
             message:
               type: string
-              example: Recipe not found
+              example: Recipe not found in favorites
             data:
               type: object
               required:
@@ -59,6 +53,6 @@ responses:
               properties:
                 message:
                   type: string
-                  example: Recipe not found
+                  example: Recipe not found in favorites
   '500':
-    $ref: ../../../../../components/responses/500.yaml
+    $ref: ../../../../components/responses/500.yaml
