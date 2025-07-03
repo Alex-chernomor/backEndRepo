@@ -7,12 +7,6 @@ security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: userId
-    required: true
-    schema:
-      type: string
-      example: 64c8d958249fae54bae90bb8
-  - in: path
     name: recipeId
     required: true
     description: ID of the recipe to add to favorites
@@ -68,7 +62,7 @@ responses:
                   type: string
                   example: Recipe already in favorites!
   '401':
-    $ref: ../../../../../components/responses/401.yaml
+    $ref: ../../../../components/responses/401.yaml
   '404':
     description: Recipe not found
     content:
@@ -80,4 +74,4 @@ responses:
               type: string
               example: Recipe not found
   '500':
-    $ref: ../../../../../components/responses/500.yaml
+    $ref: ../../../../components/responses/500.yaml
