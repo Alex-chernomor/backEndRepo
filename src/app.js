@@ -9,35 +9,13 @@ import usersRouter from './router/users.js';
 
 const app = express();
 
-app.use(
-  cors({
-    origin: ['http://localhost:5173', 'https://front-end-repo-nu.vercel.app/'],
-    credentials: true,
-  }),
-);
-
-app.use(cookieParser());
-
+// ✅ Всегда первым — JSON-парсер, иначе req.body будет undefined
 app.use(express.json());
 
-app.post('/api/auth/register', async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    // Валидация
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
+// ✅ Затем можно ставить cookie-parser
+app.use(cookieParser());
 
-    // Пример создания пользователя
-    const newUser = await User.create({ name, email, password });
-
-    res.status(201).json({ message: 'User created', user: newUser });
-  } catch (error) {
-    console.error('❌ Registration error:', error); // <== Вот это ключ
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
+// ✅ Потом логгер
 app.use(
   pinoHttp({
     transport: {
@@ -47,8 +25,18 @@ app.use(
   }),
 );
 
+// ✅ CORS после базовых middleware (можно и раньше, но лучше так)
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://front-end-repo-nu.vercel.app/'],
+    credentials: true,
+  }),
+);
+
+// ✅ Статичные файлы
 app.use('/photos', express.static(path.resolve('src', 'uploads', 'photos')));
 
+// ✅ Роуты
 app.use('/api', router);
 app.use('/users', usersRouter);
 
