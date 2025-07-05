@@ -28,13 +28,18 @@ export async function loginUser(email, password) {
   const accessToken = crypto.randomBytes(30).toString('base64');
   const refreshToken = crypto.randomBytes(30).toString('base64');
 
-  return Session.create({
+  const session = await Session.create({
     userId: user._id,
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 60 * 1000),
     refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
+
+  return {
+    session,
+    name: user.name,
+  };
 }
 
 export const logoutUser = async (sessionId) => {

@@ -20,7 +20,7 @@ export const registerUserController = async (req, res, next) => {
 };
 
 export async function loginController(req, res) {
-  const session = await loginUser(req.body.email, req.body.password);
+  const { session, name } = await loginUser(req.body.email, req.body.password);
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
@@ -37,6 +37,7 @@ export async function loginController(req, res) {
     message: 'Login successfully',
     data: {
       accessToken: session.accessToken,
+      name,
     },
   });
 }
