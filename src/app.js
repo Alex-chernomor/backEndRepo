@@ -1,34 +1,37 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'node:path';
 import cookieParser from 'cookie-parser';
-import usersRouter from './router/users.js';
+import pinoHttp from 'pino-http';
 
 import router from './router/index.js';
-
-import pinoHttp from 'pino-http';
+import usersRouter from './router/users.js';
 
 const app = express();
 
-app.use('/photos', express.static(path.resolve('src', 'uploads', 'photos')));
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://front-end-repo-nu.vercel.app/'],
+    credentials: true,
+  }),
+);
 
 app.use(cookieParser());
 
-
 app.use(express.json());
-app.use('/api', router);
 
 app.use(
   pinoHttp({
     transport: {
       target: 'pino-pretty',
-      options: {
-        colorize: true,
-      },
+      options: { colorize: true },
     },
   }),
 );
 
+app.use('/photos', express.static(path.resolve('src', 'uploads', 'photos')));
 
+app.use('/api', router);
 app.use('/users', usersRouter);
 
 export default app;
