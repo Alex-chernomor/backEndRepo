@@ -5,14 +5,18 @@ import {
   refreshSession,
 } from '../services/auth.js';
 
-export const registerUserController = async (req, resp) => {
-  const user = await registerUser(req.body);
-
-  resp.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: user,
-  });
+export const registerUserController = async (req, res, next) => {
+  try {
+    const user = await registerUser(req.body);
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully registered a user!',
+      data: user,
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    next(error);
+  }
 };
 
 export async function loginController(req, res) {
