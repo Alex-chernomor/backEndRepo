@@ -3,9 +3,7 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { auth } from '../middlewares/auth.js';
 import {
   getAllRecipesController,
-
   // getOwnRecipesController,
-
   getRecipeByIdController,
   createRecipeController,
 } from '../controllers/recipes.js';
@@ -27,7 +25,7 @@ router.post(
   upload.single('thumb'),
   jsonParser,
   auth,
-  // validateBody(createRecipeSchema),
+  validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
 export default router;
