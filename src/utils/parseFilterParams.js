@@ -1,4 +1,4 @@
-// import { getAllIngredients } from '../services/ingredients.js';
+import { getAllIngredients } from '../services/ingredients.js';
 
 const parseCategory = (category) => {
   if (typeof category !== 'string') return;
@@ -27,7 +27,9 @@ const parseIngredientId = async (ingredientId) => {
   if (typeof ingredientId !== 'string') return;
 
   const allIngredients = await getAllIngredients();
-  const ingredientsIds = allIngredients.map((ingredient) => ingredient._id);
+  const ingredientsIds = allIngredients.map((ingredient) =>
+    ingredient._id.toString(),
+  );
 
   const isIngredientId = ingredientsIds.includes(ingredientId);
   if (isIngredientId) return ingredientId;
