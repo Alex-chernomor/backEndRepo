@@ -12,34 +12,46 @@ requestBody:
         $ref: ../../../components/schemas/userLogin.yaml
 responses:
   '200':
-    description: Successfully authenticated user
+    description: OK
     content:
       application/json:
         schema:
           type: object
           required:
-            - status
-            - token
-            - user
+            - accessToken
+            - name
           properties:
             status:
               type: integer
               example: 200
-            token:
+            message:
               type: string
-              description: JWT access token
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-            user:
-              $ref: ../../../components/schemas/user.yaml
+              example: Login successfully
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: '60d0fe4f5311236168a109ca'
+                name:
+                  type: string
+                  example: John Doe
   '400':
-    description: Invalid email or password
+    description: Bad Request
     content:
       application/json:
         schema:
           type: object
           properties:
+            status:
+              type: integer
+              example: 400
             message:
-              type: string
-              example: Invalid email or password
+              type: array
+              items:
+                type: string
+                example: Invalid email format
+  '404':
+    $ref: ../../../components/responses/404.yaml
   '500':
     $ref: ../../../components/responses/500.yaml

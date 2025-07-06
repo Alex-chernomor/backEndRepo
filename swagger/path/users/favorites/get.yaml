@@ -9,7 +9,7 @@ security:
   - bearerAuth: []
 responses:
   '200':
-    description: Successfully retrieved favorite recipes
+    description: OK
     content:
       application/json:
         schema:

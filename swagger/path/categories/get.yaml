@@ -6,7 +6,7 @@ description: Get list of all available categories for recipe
 security: []
 responses:
   '200':
-    description: Seccessfully fetched list of all recipe categories
+    description: OK
     content:
       application/json:
         schema:
@@ -21,13 +21,13 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found all categories!
+              example: Categories fetched successfully
             data:
               type: array
               items:
                 $ref: ../../components/schemas/category.yaml
-  '400':
-    $ref: ../../components/responses/400.yaml
+  # '400':
+  #   $ref: ../../components/responses/400.yaml
   '404':
     $ref: ../../components/responses/404.yaml
   '500':

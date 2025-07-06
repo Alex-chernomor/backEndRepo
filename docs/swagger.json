@@ -16,12 +16,24 @@
   ],
   "tags": [
     {
-      "name": "Testeorama Recipes App",
+      "name": "Auth",
+      "description": "Auth operations."
+    },
+    {
+      "name": "Categories",
+      "description": "Operations about categories."
+    },
+    {
+      "name": "Ingredients",
+      "description": "Operations about ingredients."
+    },
+    {
+      "name": "Recipes",
       "description": "Operations about recipes."
     },
     {
-      "name": "Auth",
-      "description": "Auth operations."
+      "name": "Users",
+      "description": "Operations about users."
     }
   ],
   "paths": {
@@ -46,7 +58,7 @@
         },
         "responses": {
           "201": {
-            "description": "Successfully registered new user",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -63,7 +75,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully registered new user"
+                      "example": "Successfully registered a user!"
                     },
                     "data": {
                       "type": "object",
@@ -75,7 +87,30 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/400"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "Invalid email format"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "409": {
             "$ref": "#/components/responses/409"
@@ -107,28 +142,36 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully authenticated user",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "required": [
-                    "status",
-                    "token",
-                    "user"
+                    "accessToken",
+                    "name"
                   ],
                   "properties": {
                     "status": {
                       "type": "integer",
                       "example": 200
                     },
-                    "token": {
+                    "message": {
                       "type": "string",
-                      "description": "JWT access token",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      "example": "Login successfully"
                     },
-                    "user": {
-                      "$ref": "#/components/schemas/user"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "60d0fe4f5311236168a109ca"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        }
+                      }
                     }
                   }
                 }
@@ -136,20 +179,30 @@
             }
           },
           "400": {
-            "description": "Invalid email or password",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
                     "message": {
-                      "type": "string",
-                      "example": "Invalid email or password"
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "Invalid email format"
+                      }
                     }
                   }
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -183,25 +236,14 @@
         }
       }
     },
-    "/api/users/{userId}": {
-      "get": {
+    "/api/auth/refresh": {
+      "post": {
         "tags": [
-          "Users"
+          "Auth"
         ],
-        "summary": "Get current user info",
-        "operationId": "getUser",
-        "description": "Get current user information",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb9"
-            }
-          }
-        ],
+        "summary": "Refresh access token",
+        "operationId": "refreshToken",
+        "description": "Refresh JWT access token",
         "security": [
           {
             "bearerAuth": []
@@ -209,11 +251,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully fetched current user",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "accessToken"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -221,18 +266,101 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Seccessfully fetched current user!"
+                      "example": "Refresh completed successfully"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "_id": {
+                        "accessToken": {
                           "type": "string",
                           "example": "60d0fe4f5311236168a109ca"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user info",
+        "operationId": "getUser",
+        "description": "Get current user information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": "success"
+                    },
+                    "user": {
+                      "type": "object",
+                      "required": [
+                        "_id",
+                        "name",
+                        "email",
+                        "favorites",
+                        "own",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User's Id",
+                          "example": "68694eb9293e95a40224645d"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "User's name",
+                          "example": "John Doe"
                         },
                         "email": {
                           "type": "string",
-                          "example": "user@example.com"
+                          "description": "User's email address",
+                          "example": "john.doe@mail.com"
+                        },
+                        "favorites": {
+                          "type": "array",
+                          "description": "List of recipes IDs added to favorites"
+                        },
+                        "own": {
+                          "type": "array",
+                          "description": "List of recipes IDs created by user"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
                         }
                       }
                     }
@@ -256,7 +384,7 @@
         }
       }
     },
-    "/api/users/{userId}/favorites": {
+    "/api/users/favorites": {
       "get": {
         "tags": [
           "Users"
@@ -264,17 +392,6 @@
         "summary": "Get list of all user's favorite recipes",
         "operationId": "getUserFavorites",
         "description": "Retrieves all favorite recipes of the authenticated user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb9"
-            }
-          }
-        ],
         "security": [
           {
             "bearerAuth": []
@@ -282,7 +399,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved favorite recipes",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -353,7 +470,7 @@
         }
       }
     },
-    "/api/users/{userId}/favorites/{recipeId}": {
+    "/api/users/favorites/{recipeId}": {
       "post": {
         "tags": [
           "Users"
@@ -369,15 +486,6 @@
         "parameters": [
           {
             "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb8"
-            }
-          },
-          {
-            "in": "path",
             "name": "recipeId",
             "required": true,
             "description": "ID of the recipe to add to favorites",
@@ -389,7 +497,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully added recipe to favorites",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -426,7 +534,7 @@
             }
           },
           "400": {
-            "description": "Recipe is already in favorites",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
@@ -497,15 +605,6 @@
         "parameters": [
           {
             "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb9"
-            }
-          },
-          {
-            "in": "path",
             "name": "recipeId",
             "required": true,
             "description": "ID of the recipe to remove from favorites",
@@ -517,7 +616,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully removed recipe from favorites",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -582,25 +681,14 @@
         }
       }
     },
-    "/api/users/{userId}/own": {
+    "/api/users/own": {
       "get": {
         "tags": [
           "Users"
         ],
         "summary": "Get list of user's own recipes",
         "operationId": "getUserOwnRecipes",
-        "description": "Retrieves own recipes.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb9"
-            }
-          }
-        ],
+        "description": "Retrieves list of users own recipes.",
         "security": [
           {
             "bearerAuth": []
@@ -608,7 +696,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved own recipes",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -672,176 +760,6 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Add new recipe",
-        "operationId": "addNewRecipe",
-        "description": "Add new recipe",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb8"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully added new recipe",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "New recipe seccessfully added!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "required": [
-                        "message"
-                      ],
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "New recipe seccessfully added!"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/api/users/{userId}/own/{recipeId}": {
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Delete own recipe",
-        "operationId": "deleteOwnResipe",
-        "description": "Delete user's own recipe",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64c8d958249fae54bae90bb9"
-            }
-          },
-          {
-            "in": "path",
-            "name": "recipeId",
-            "required": true,
-            "description": "ID of the recipe to remove from own recipes list",
-            "schema": {
-              "type": "string",
-              "example": "6462a8f74c3d0ddd28897fcd"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully deleted recipe!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Recipe was seccessfully deleted!"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "description": "Recipe not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 401
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Recipe not found"
-                    },
-                    "data": {
-                      "type": "object",
-                      "required": [
-                        "message"
-                      ],
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Recipe not found"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -919,7 +837,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfuly get all recipes list",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -948,76 +866,6 @@
                           "items": {
                             "$ref": "#/components/schemas/recipe"
                           }
-                        },
-                        "_id": {
-                          "type": "string",
-                          "description": "Recipe id",
-                          "example": "507f1f77bcf86cd799439011"
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "Recipe title",
-                          "example": "Callaloo Jamaican Style"
-                        },
-                        "category": {
-                          "type": "string",
-                          "description": "Recipe category",
-                          "example": "Soup"
-                        },
-                        "owner": {
-                          "type": "string",
-                          "description": "Recipe owner",
-                          "example": "6592008029c8c3e4dc76256c"
-                        },
-                        "area": {
-                          "type": "string",
-                          "description": "Recipe area",
-                          "example": "British"
-                        },
-                        "instructions": {
-                          "type": "string",
-                          "description": "Recipe instructions",
-                          "example": "Heat oven to 160C/fan 140C/gas 3. Heat some dripping or butter in a large shallow casserole dish, brown the lamb in batches..."
-                        },
-                        "description": {
-                          "type": "string",
-                          "description": "Recipe description",
-                          "example": "A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds."
-                        },
-                        "thumb": {
-                          "type": "string",
-                          "format": "url",
-                          "description": "Recipe photo url",
-                          "example": "https://res.cloudinary.com/dvda8nxai/image/upload/v1749381064/b7hiztxuoqgaauryqleh.jpg"
-                        },
-                        "time": {
-                          "type": "string",
-                          "description": "Cooking time in minutes",
-                          "example": 45
-                        },
-                        "ingredients": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "example": "640c2dd963a319ea671e3687"
-                              },
-                              "measure": {
-                                "type": "string",
-                                "example": "2 cups"
-                              }
-                            }
-                          }
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "updatedAt": {
-                          "type": "string",
-                          "format": "date-time"
                         }
                       }
                     },
@@ -1031,11 +879,11 @@
                     },
                     "perPage": {
                       "type": "integer",
-                      "example": 10
+                      "example": 12
                     },
                     "totalPages": {
                       "type": "integer",
-                      "example": 12
+                      "example": 10
                     }
                   }
                 }
@@ -1057,69 +905,94 @@
         "tags": [
           "Recipes"
         ],
-        "summary": "Create recipe",
-        "operationId": "createRecipe",
-        "description": "Create a new recipe",
+        "summary": "Add new recipe",
+        "operationId": "addNewRecipe",
+        "description": "Add new recipe",
         "security": [
           {
             "bearerAuth": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "contactType"
-                ],
-                "properties": {
-                  "name": {
-                    "description": "Contacts's name",
-                    "type": "string",
-                    "example": "John Doe"
-                  },
-                  "phoneNumber": {
-                    "description": "Contacts's phone number",
-                    "type": "string",
-                    "example": 1234567890
-                  },
-                  "email": {
-                    "description": "Contacts's email",
-                    "type": "string",
-                    "example": "john.doe@mail.com"
-                  },
-                  "isFavourite": {
-                    "description": "Contact's category",
-                    "type": "boolean"
-                  },
-                  "contactType": {
-                    "description": "Contact's type",
-                    "type": "string",
-                    "enum": [
-                      "work",
-                      "home",
-                      "personal"
-                    ]
-                  },
-                  "photo": {
-                    "description": "Link to contact's photo",
-                    "type": "string",
-                    "format": "binary"
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "New recipe seccessfully added!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/recipe"
+                    }
                   }
                 }
               }
             }
-          }
-        },
-        "responses": {
-          "201": {
-            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "Unexpected end of JSON input"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "error"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Something went wrong on the server"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1132,11 +1005,7 @@
         "summary": "Get recipe by id",
         "operationId": "getRecipe",
         "description": "Get recipe by id",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "parameters": [
           {
             "in": "path",
@@ -1150,7 +1019,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get recipe by id",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1167,48 +1036,35 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully found recipe with id 65ca67e7ae7f10c88b598384!"
+                      "example": "Successfully found recipe by id!"
                     },
                     "data": {
                       "type": "object",
                       "$ref": "#/components/schemas/recipe"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "example": 120
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "perPage": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "example": 10
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "$ref": "#/components/responses/404"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Recipes"
-        ],
-        "summary": "Patch recipe by id",
-        "operationId": "patchRecipe",
-        "description": "Patch recipe by id",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "recipeId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully pached recipe by id",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1221,59 +1077,16 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 400
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully pached recipe with id 65ca67e7ae7f10c88b598384!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/recipe"
+                      "example": "Id should be an ObjectId"
                     }
                   }
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Recipes"
-        ],
-        "summary": "Delete own recipe by id",
-        "operationId": "deleteResipe",
-        "description": "Delete recipe by id",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "recipeId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Deleted recipe by id",
-            "content": {}
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1292,7 +1105,7 @@
         "security": [],
         "responses": {
           "200": {
-            "description": "Seccessfully fetched list of all recipe categories",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1309,7 +1122,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully found all categories!"
+                      "example": "Categories fetched successfully"
                     },
                     "data": {
                       "type": "array",
@@ -1321,9 +1134,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1345,7 +1155,7 @@
         "security": [],
         "responses": {
           "200": {
-            "description": "Seccessfully fetched list of ingredients",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -1357,7 +1167,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Seccessfully fetched list of ingredients!"
+                      "example": "Successfully found ingredients!"
                     },
                     "data": {
                       "type": "array",
@@ -1369,9 +1179,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1402,17 +1209,23 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "User's name",
+            "minLength": 1,
+            "maxLength": 16,
+            "description": "Username should have 1-16 characters",
             "example": "John Doe"
           },
           "email": {
             "type": "string",
-            "description": "User's email address",
+            "format": "email",
+            "maxLength": 128,
+            "description": "Must be a valid email",
             "example": "john.doe@mail.com"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
+            "minLength": 8,
+            "maxLength": 128,
+            "description": "Password must be between 8 and 128 characters",
             "example": "SuperStar2025$"
           }
         }
@@ -1427,11 +1240,6 @@
           "own"
         ],
         "properties": {
-          "_id": {
-            "type": "string",
-            "description": "User id",
-            "example": "64c8d958249fae54bae90bb8"
-          },
           "name": {
             "type": "string",
             "description": "User's name",
@@ -1444,19 +1252,16 @@
           },
           "favorites": {
             "type": "array",
-            "description": "List of recipes IDs added to favorites",
-            "items": {
-              "type": "string",
-              "example": "507f1f77bcf86cd799439012"
-            }
+            "description": "List of recipes IDs added to favorites"
           },
           "own": {
             "type": "array",
-            "description": "List of recipes IDs created by user",
-            "items": {
-              "type": "string",
-              "example": "507f1f77bcf86cd799439045"
-            }
+            "description": "List of recipes IDs created by user"
+          },
+          "_id": {
+            "type": "string",
+            "description": "User id",
+            "example": "64c8d958249fae54bae90bb8"
           },
           "createdAt": {
             "type": "string",
@@ -1478,11 +1283,16 @@
           "email": {
             "type": "string",
             "format": "email",
+            "maxLength": 128,
+            "description": "Valid email required",
             "example": "john.doe@examplemail.com"
           },
           "password": {
             "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
             "format": "password",
+            "description": "Password must be between 8 and 128 characters",
             "example": "SuperStar2025$"
           }
         }
@@ -1498,6 +1308,7 @@
           "description",
           "time",
           "ingredients",
+          "cals",
           "createdAt",
           "updatedAt"
         ],
@@ -1509,16 +1320,35 @@
           },
           "title": {
             "type": "string",
-            "description": "Recipe title",
+            "maxLength": 64,
+            "description": "Title should have at most 64 characters",
             "example": "Callaloo Jamaican Style"
           },
           "category": {
             "type": "string",
-            "description": "Recipe category",
+            "enum": [
+              "Seafood",
+              "Lamb",
+              "Starter",
+              "Chicken",
+              "Beef",
+              "Dessert",
+              "Vegan",
+              "Pork",
+              "Vegetarian",
+              "Miscellaneous",
+              "Pasta",
+              "Breakfast",
+              "Side",
+              "Goat",
+              "Soup"
+            ],
+            "description": "One of the predefined categories",
             "example": "Soup"
           },
           "owner": {
             "type": "string",
+            "pattern": "^[0-9a-fA-F]{24}$",
             "description": "Recipe owner's Id",
             "example": "6592008029c8c3e4dc76256c"
           },
@@ -1529,36 +1359,56 @@
           },
           "instructions": {
             "type": "string",
-            "description": "Recipe instructions",
+            "maxLength": 1200,
+            "description": "Recipe detailed instructions",
             "example": "Heat oven to 160C/fan 140C/gas 3. Heat some dripping or butter in a large shallow casserole dish, brown the lamb in batches..."
           },
           "description": {
             "type": "string",
-            "description": "Recipe description",
+            "maxLength": 200,
+            "description": "Description should have at most 200 characters",
             "example": "A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds."
           },
           "thumb": {
             "type": "string",
-            "format": "url",
-            "description": "Recipe photo url",
+            "format": "binary",
+            "description": "Recipe image file",
             "example": "https://res.cloudinary.com/dvda8nxai/image/upload/v1749381064/b7hiztxuoqgaauryqleh.jpg"
           },
           "time": {
             "type": "string",
-            "description": "Cooking time in minutes",
+            "minLength": 1,
+            "maxLength": 360,
+            "description": "Cooking time in minutes, between 1 and 360",
             "example": 45
           },
           "ingredients": {
             "type": "array",
+            "minItems": 2,
+            "maxItems": 16,
             "items": {
               "type": "object",
+              "required": [
+                "_id",
+                "id",
+                "measure"
+              ],
               "properties": {
+                "_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{24}$",
+                  "description": "Ingredient ObjectId",
+                  "example": "640c2dd963a319ea671e3687"
+                },
                 "id": {
                   "type": "string",
+                  "pattern": "^[0-9a-fA-F]{24}$",
+                  "description": "Ingredient ObjectId",
                   "example": "640c2dd963a319ea671e3687"
                 },
                 "measure": {
                   "type": "string",
+                  "description": "Ingredient amount",
                   "example": "2 cups"
                 }
               }
@@ -1624,54 +1474,17 @@
             "format": "url",
             "description": "Photo of the ingredient",
             "example": "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e3804.png"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       }
     },
     "responses": {
-      "201": {
-        "description": "Creates a recipe",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "status",
-                "message",
-                "data"
-              ],
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 201
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Successfully created a recipe!"
-                },
-                "data": {
-                  "type": "object",
-                  "$ref": "#/components/schemas/recipe"
-                }
-              }
-            }
-          }
-        }
-      },
       "204": {
-        "description": "Successfully logged out (no content)",
+        "description": "No Content",
         "content": {}
       },
       "400": {
-        "description": "Bad request",
+        "description": "Bad Request",
         "content": {
           "application/json": {
             "schema": {
@@ -1688,16 +1501,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "BadRequestError"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Bad request!"
-                    }
-                  }
+                  "example": "Unexpected end of JSON input"
                 }
               }
             }
@@ -1705,7 +1509,7 @@
         }
       },
       "401": {
-        "description": "Unauthorized error",
+        "description": "Unauthorized",
         "content": {
           "application/json": {
             "schema": {
@@ -1722,19 +1526,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "UnauthorizedError"
-                },
-                "data": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Access token missing or expired!"
-                    }
-                  }
+                  "example": "Access token is expired"
                 }
               }
             }
@@ -1742,36 +1534,14 @@
         }
       },
       "404": {
-        "description": "NotFoundError",
+        "description": "Not Found",
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "required": [
-                "status",
-                "message",
-                "error"
-              ],
               "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 404
-                },
                 "message": {
                   "type": "string",
-                  "example": "NotFoundError"
-                },
-                "error": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Recipes not found"
-                    }
-                  }
+                  "example": "Not found"
                 }
               }
             }
@@ -1779,7 +1549,7 @@
         }
       },
       "409": {
-        "description": "Email in use",
+        "description": "Conflict",
         "content": {
           "application/json": {
             "schema": {
@@ -1792,23 +1562,11 @@
               "properties": {
                 "status": {
                   "type": "integer",
-                  "example": 404
+                  "example": 409
                 },
                 "message": {
                   "type": "string",
-                  "example": "EmailInUse"
-                },
-                "data": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "This email is already in use"
-                    }
-                  }
+                  "example": "This email is already in use"
                 }
               }
             }

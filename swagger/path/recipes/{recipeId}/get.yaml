@@ -13,7 +13,7 @@ parameters:
       example: '65ca67e7ae7f10c88b598384'
 responses:
   '200':
-    description: 'Get recipe by id'
+    description: OK
     content:
       application/json:
         schema:
@@ -28,9 +28,38 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found recipe with id 65ca67e7ae7f10c88b598384!
+              example: Successfully found recipe by id!
             data:
               type: object
               $ref: ../../../components/schemas/recipe.yaml
+            total:
+              type: integer
+              example: 120
+            page:
+              type: integer
+              example: 1
+            perPage:
+              type: integer
+              example: 12
+            totalPages:
+              type: integer
+              example: 10
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Id should be an ObjectId
   '404':
     $ref: ../../../components/responses/404.yaml

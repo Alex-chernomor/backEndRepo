@@ -1,4 +1,4 @@
-description: Bad request
+description: Bad Request
 content:
   application/json:
     schema:
@@ -13,10 +13,4 @@ content:
           example: 400
         message:
           type: string
-          example: BadRequestError
-        data:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Bad request!
+          example: Unexpected end of JSON input

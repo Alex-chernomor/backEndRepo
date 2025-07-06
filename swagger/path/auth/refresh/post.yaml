@@ -7,16 +7,29 @@ security:
   - bearerAuth: []
 responses:
   '200':
-    description: New access token returned
+    description: OK
     content:
       application/json:
         schema:
           type: object
+          required:
+            - accessToken
           properties:
-            token:
+            status:
+              type: integer
+              example: 200
+            message:
               type: string
-              example: 'new-access-token-123'
-  '401':
-    $ref: '../../../components/responses/401.yaml'
+              example: Refresh completed successfully
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: '60d0fe4f5311236168a109ca'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
   '500':
     $ref: '../../../components/responses/500.yaml'
