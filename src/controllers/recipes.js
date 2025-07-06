@@ -96,12 +96,18 @@ export const getRecipeByIdController = async (req, resp) => {
 };
 
 export const getOwnRecipesController = async (req, res, next) => {
-  const own = await getRecipesOwn(req.user._id);
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const data = await getRecipesOwn({
+    page,
+    perPage,
+    owner: req.user._id,
+  });
 
   res.json({
     status: 200,
     message: 'Successfully found own recipes!',
-    data: own,
+    data,
   });
 };
 

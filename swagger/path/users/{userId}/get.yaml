@@ -12,6 +12,16 @@ parameters:
     schema:
       type: string
       example: '64c8d958249fae54bae90bb9'
+  - in: query
+    name: page
+    schema:
+      type: integer
+      example: 1
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      example: 12
 security:
   - bearerAuth: []
 responses:
