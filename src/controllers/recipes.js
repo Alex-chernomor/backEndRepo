@@ -132,7 +132,8 @@ export const deleteFavoriteController = async (req, res, next) => {
 };
 
 export const getAllFavoritesController = async (req, res) => {
-  const favorites = await getAllFavorites(req.user._id);
+  const { page, perPage } = parsePaginationParams(req.query);
+  const favorites = await getAllFavorites(req.user._id, page, perPage);
 
   res.status(200).json({
     status: 200,

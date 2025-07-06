@@ -4,9 +4,26 @@ tags:
   - Users
 summary: Get list of all user's favorite recipes
 operationId: getUserFavorites
-description: Retrieves all favorite recipes of the authenticated user.
+description: Retrieves all favorite recipes of the authenticated user with optional pagination.
 security:
   - bearerAuth: []
+
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      minimum: 1
+      default: 1
+    description: Page number for pagination.
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      minimum: 1
+      default: 12
+    description: Number of recipes per page.
+
 responses:
   '200':
     description: OK
