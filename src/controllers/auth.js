@@ -7,11 +7,25 @@ import {
 
 export const registerUserController = async (req, res, next) => {
   try {
-    const user = await registerUser(req.body);
+    const { session, user } = await registerUser(req.body);
+
+    res.cookie('sessionId', session._id, {
+      httpOnly: true,
+      expires: session.refreshTokenValidUntil,
+    });
+
+    res.cookie('refreshToken', session.refreshToken, {
+      httpOnly: true,
+      expires: session.refreshTokenValidUntil,
+    });
+
     res.status(201).json({
       status: 201,
       message: 'Successfully registered a user!',
-      data: user,
+      data: {
+        token: session.accessToken,
+        user,
+      },
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -20,7 +34,7 @@ export const registerUserController = async (req, res, next) => {
 };
 
 export async function loginController(req, res) {
-  const { session, name } = await loginUser(req.body.email, req.body.password);
+  const { session, user } = await loginUser(req.body.email, req.body.password);
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
@@ -36,8 +50,8 @@ export async function loginController(req, res) {
     status: 200,
     message: 'Login successfully',
     data: {
-      accessToken: session.accessToken,
-      name,
+      token: session.accessToken,
+      user,
     },
   });
 }
