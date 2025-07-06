@@ -24,7 +24,7 @@ router.post(
   upload.single('thumb'),
   jsonParser,
   auth,
-  // validateBody(createRecipeSchema),
+  validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
 export default router;

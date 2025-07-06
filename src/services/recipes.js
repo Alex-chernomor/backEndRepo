@@ -81,12 +81,7 @@ export const deleteFavorite = async (userId, recipeId) => {
   );
 };
 
-export const getAllFavorites = async (userId) => {
-  const page = 1;
-  const perPage = 12;
-  const sortBy = 'createdAt';
-  const sortOrder = -1;
-
+export const getAllFavorites = async (userId, page = 1, perPage = 12) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
@@ -104,7 +99,14 @@ export const getAllFavorites = async (userId) => {
       .sort({ [sortBy]: sortOrder }),
   ]);
 
-  const paginationData = calculatePaginationData(recipesCount, perPage, page);
+  const totalPages = Math.ceil(recipesCount / perPage);
+
+  const paginationData = calculatePaginationData(
+    recipesCount,
+    perPage,
+    page,
+    totalPages,
+  );
 
   return {
     data: recipes,

@@ -1,46 +1,62 @@
 tags:
   - Recipes
-summary: Create recipe
-operationId: createRecipe
-description: Create a new recipe
+summary: Add new recipe
+operationId: addNewRecipe
+description: Add new recipe
 security:
   - bearerAuth: []
-requestBody:
-  content:
-    multipart/form-data:
-      schema:
-        type: object
-        required:
-          - name
-          - phoneNumber
-          - contactType
-        properties:
-          name:
-            description: "Contacts's name"
-            type: string
-            example: 'John Doe'
-          phoneNumber:
-            description: "Contacts's phone number"
-            type: string
-            example: 1234567890
-          email:
-            description: "Contacts's email"
-            type: string
-            example: john.doe@mail.com
-          isFavourite:
-            description: "Contact's category"
-            type: boolean
-          contactType:
-            description: "Contact's type"
-            type: string
-            enum: ['work', 'home', 'personal']
-          photo:
-            description: "Link to contact's photo"
-            type: string
-            format: binary
-
 responses:
-  '201':
-    $ref: ../../components/responses/201.yaml
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: New recipe seccessfully added!
+            data:
+              type: object
+              $ref: ../../components/schemas/recipe.yaml
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: array
+              items:
+                type: string
+                example: Unexpected end of JSON input
   '401':
     $ref: ../../components/responses/401.yaml
+  '500':
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - error
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: Something went wrong on the server

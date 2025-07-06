@@ -24,9 +24,9 @@ properties:
     format: url
     description: Photo of the ingredient
     example: https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e3804.png
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
+  # createdAt:
+  #   type: string
+  #   format: date-time
+  # updatedAt:
+  #   type: string
+  #   format: date-time

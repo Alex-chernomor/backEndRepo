@@ -6,13 +6,19 @@ required:
 properties:
   name:
     type: string
-    description: User's name
+    minLength: 1
+    maxLength: 16
+    description: Username should have 1-16 characters
     example: John Doe
   email:
     type: string
-    description: User's email address
+    format: email
+    maxLength: 128
+    description: Must be a valid email
     example: john.doe@mail.com
   password:
     type: string
-    description: User's password
+    minLength: 8
+    maxLength: 128
+    description: Password must be between 8 and 128 characters
     example: SuperStar2025$
