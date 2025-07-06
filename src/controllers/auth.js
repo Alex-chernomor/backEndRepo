@@ -5,18 +5,22 @@ import {
   refreshSession,
 } from '../services/auth.js';
 
-export const registerUserController = async (req, resp) => {
-  const user = await registerUser(req.body);
-
-  resp.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: user,
-  });
+export const registerUserController = async (req, res, next) => {
+  try {
+    const user = await registerUser(req.body);
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully registered a user!',
+      data: user,
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    next(error);
+  }
 };
 
 export async function loginController(req, res) {
-  const session = await loginUser(req.body.email, req.body.password);
+  const { session, name } = await loginUser(req.body.email, req.body.password);
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
@@ -33,6 +37,7 @@ export async function loginController(req, res) {
     message: 'Login successfully',
     data: {
       accessToken: session.accessToken,
+      name,
     },
   });
 }
