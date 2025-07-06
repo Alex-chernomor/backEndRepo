@@ -17,6 +17,7 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
+import mongoose from 'mongoose';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -106,7 +107,8 @@ export const getOwnRecipesController = async (req, res, next) => {
 };
 
 export const addFavoriteController = async (req, res) => {
-  const favorite = await addFavorite(req.user._id, req.params.recipeId);
+  const recipeId = new mongoose.Types.ObjectId(req.params.recipeId);
+  const favorite = await addFavorite(req.user._id, recipeId);
 
   res.status(201).json({
     status: 201,
@@ -116,7 +118,7 @@ export const addFavoriteController = async (req, res) => {
 };
 
 export const deleteFavoriteController = async (req, res, next) => {
-  const { recipeId } = req.params;
+  const recipeId = new mongoose.Types.ObjectId(req.params.recipeId);
 
   const favourite = await deleteFavorite(req.user._id, recipeId);
 
