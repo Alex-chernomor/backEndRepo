@@ -9,13 +9,13 @@ properties:
     minLength: 1
     maxLength: 16
     description: Username should have 1-16 characters
-    example: Mary James
+    example: John Doe
   email:
     type: string
     format: email
     maxLength: 128
     description: Must be a valid email
-    example: mary.james@mail.com
+    example: john.doe@mail.com
   password:
     type: string
     minLength: 8

@@ -21,11 +21,11 @@ properties:
     maxLength: 64
     description: Title should have at most 64 characters
     example: Callaloo Jamaican Style
-  cals:
-    type: string
-    minLength: 1
-    maxLength: 10000
-    description: Optional calories amount, between 1 and 10000
+  # cals:
+  #   type: string
+  #   minLength: 1
+  #   maxLength: 10000
+  #   description: Optional calories amount, between 1 and 10000
   category:
     type: string
     enum:
@@ -83,9 +83,15 @@ properties:
     items:
       type: object
       required:
+        - _id
         - id
         - measure
       properties:
+        _id:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+          description: Ingredient ObjectId
+          example: 640c2dd963a319ea671e3687
         id:
           type: string
           pattern: '^[0-9a-fA-F]{24}$'

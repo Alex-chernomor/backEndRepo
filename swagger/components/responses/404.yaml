@@ -1,24 +1,28 @@
-description: NotFoundError
+description: Not Found
 content:
   application/json:
     schema:
-      type: object
-      required:
-        - status
-        - message
-        - error
       properties:
-        status:
-          type: integer
-          example: 404
         message:
           type: string
-          example: NotFoundError
-        error:
-          type: object
-          required:
-            - message
-          properties:
-            message:
-              type: string
-              example: 'Recipes not found'
+          example: Not found
+      # type: object
+      # required:
+      #   - status
+      #   - message
+      #   - error
+      # properties:
+      #   status:
+      #     type: integer
+      #     example: 404
+      #   message:
+      #     type: string
+      #     example: NotFoundError
+      #   error:
+      #     type: object
+      #     required:
+      #       - message
+      #     properties:
+      #       message:
+      #         type: string
+      #         example: 'Recipe not found'

@@ -1,4 +1,4 @@
-description: Email in use
+description: Conflict
 content:
   application/json:
     schema:
@@ -10,15 +10,15 @@ content:
       properties:
         status:
           type: integer
-          example: 404
+          example: 409
         message:
           type: string
-          example: EmailInUse
-        data:
-          type: object
-          required:
-            - message
-          properties:
-            message:
-              type: string
-              example: 'This email is already in use'
+          example: This email is already in use
+        # data:
+        #   type: object
+        #   required:
+        #     - message
+        #   properties:
+        #     message:
+        #       type: string
+        #       example: 'This email is already in use'

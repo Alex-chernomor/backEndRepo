@@ -15,7 +15,7 @@ parameters:
       example: 6462a8f74c3d0ddd28897fcd
 responses:
   '200':
-    description: Successfully removed recipe from favorites
+    description: OK
     content:
       application/json:
         schema:
