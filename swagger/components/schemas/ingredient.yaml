@@ -10,7 +10,7 @@ properties:
   _id:
     type: string
     description: Ingredient Id
-    example: 640c2dd963a319ea671e3804
+    example: 686bd76645da07c250ba8280
   name:
     type: string
     description: Name of the ingredient

@@ -30,7 +30,53 @@ responses:
               example: Successfully registered a user!
             data:
               type: object
-              $ref: ../../../components/schemas/user.yaml
+              required:
+                - token
+                - user
+              properties:
+                token:
+                  type: string
+                  example: gz7o9H2rGAQMUDpk+Tkio1QdripNtKLRv+N+zBQ+
+                user:
+                  type: object
+                  required:
+                    - _id
+                    - name
+                    - email
+                    - favorites
+                    - own
+                    - createdAt
+                    - updatedAt
+                  properties:
+                    name:
+                      type: string
+                      example: xxx
+                    email:
+                      type: string
+                      example: xxxxx@mail.com
+                    favorites:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    own:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    _id:
+                      type: string
+                      example: 686b1cf710c803fb56b2990d
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-07T01:03:51.580Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-07T01:03:51.580Z
+
+              # $ref: ../../../components/schemas/user.yaml
   '400':
     description: Bad Request
     content:

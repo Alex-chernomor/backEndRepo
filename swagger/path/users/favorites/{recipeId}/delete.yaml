@@ -26,7 +26,7 @@ responses:
               example: 200
             message:
               type: string
-              example: Recipe removed from favorites
+              example: Recipe with id 6462a8f74c3d0ddd288980c7 was successfully removed from favorites
   '401':
     $ref: ../../../../components/responses/401.yaml
   '404':

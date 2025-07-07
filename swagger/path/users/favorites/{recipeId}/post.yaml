@@ -14,7 +14,7 @@ parameters:
       type: string
       example: 65ca67e7ae7f10c88b598384
 responses:
-  '200':
+  '201':
     description: OK
     content:
       application/json:
@@ -27,18 +27,50 @@ responses:
           properties:
             status:
               type: integer
-              example: 200
+              example: 201
             message:
               type: string
-              example: Recipe added to favorites
+              example: Successfully added to favorite recipes!
             data:
               type: object
               required:
-                - message
+                - _id
+                - name
+                - email
+                - favorites
+                - own
+                - createdAt
+                - updatedAt
               properties:
-                message:
+                _id:
                   type: string
-                  example: Recipe seccessfully added to favorites!
+                  example: 686aa13947d030654c6e4513
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john.doe@mail.com
+                favorites:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - 6462a8f74c3d0ddd288980d1
+                    - 65ca67e7ae7f10c88b598384
+                own:
+                  type: array
+                  items:
+                    type: string
+                  example: []
+                createdAt:
+                  type: string
+                  format: date-time
+                  example: 2025-07-06T16:15:53.629Z
+                updatedAt:
+                  type: string
+                  format: date-time
+                  example: 2025-07-07T16:37:31.244Z
   '400':
     description: Bad Request
     content:

@@ -79,7 +79,66 @@
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/user"
+                      "required": [
+                        "token",
+                        "user"
+                      ],
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "gz7o9H2rGAQMUDpk+Tkio1QdripNtKLRv+N+zBQ+"
+                        },
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "_id",
+                            "name",
+                            "email",
+                            "favorites",
+                            "own",
+                            "createdAt",
+                            "updatedAt"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "xxx"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "xxxxx@mail.com"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": []
+                            },
+                            "own": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": []
+                            },
+                            "_id": {
+                              "type": "string",
+                              "example": "686b1cf710c803fb56b2990d"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2025-07-07T01:03:51.580Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2025-07-07T01:03:51.580Z"
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -148,8 +207,9 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "accessToken",
-                    "name"
+                    "status",
+                    "message",
+                    "data"
                   ],
                   "properties": {
                     "status": {
@@ -162,14 +222,64 @@
                     },
                     "data": {
                       "type": "object",
+                      "required": [
+                        "token",
+                        "user"
+                      ],
                       "properties": {
-                        "accessToken": {
+                        "token": {
                           "type": "string",
-                          "example": "60d0fe4f5311236168a109ca"
+                          "example": "4/lRcCVW/D3L84UaFmtycO0ob4C55rGUv/iS9niV"
                         },
-                        "name": {
-                          "type": "string",
-                          "example": "John Doe"
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "_id",
+                            "name",
+                            "email",
+                            "favorites",
+                            "own",
+                            "createdAt",
+                            "updatedAt"
+                          ],
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "686a88d647d030654c6df52e"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Ann"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "Ann@mail.com"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": []
+                            },
+                            "own": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": []
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2025-07-06T14:31:50.631Z"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2025-07-06T14:31:50.631Z"
+                            }
+                          }
                         }
                       }
                     }
@@ -192,9 +302,11 @@
                     "message": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "example": "Invalid email format"
-                      }
+                        "type": "string"
+                      },
+                      "example": [
+                        "Invalid email format"
+                      ]
                     }
                   }
                 }
@@ -314,53 +426,95 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
-                      "type": "integer",
+                      "type": "string",
                       "example": "success"
                     },
-                    "user": {
+                    "data": {
                       "type": "object",
                       "required": [
-                        "_id",
-                        "name",
-                        "email",
-                        "favorites",
-                        "own",
-                        "createdAt",
-                        "updatedAt"
+                        "user"
                       ],
                       "properties": {
-                        "_id": {
-                          "type": "string",
-                          "description": "User's Id",
-                          "example": "68694eb9293e95a40224645d"
-                        },
-                        "name": {
-                          "type": "string",
-                          "description": "User's name",
-                          "example": "John Doe"
-                        },
-                        "email": {
-                          "type": "string",
-                          "description": "User's email address",
-                          "example": "john.doe@mail.com"
-                        },
-                        "favorites": {
-                          "type": "array",
-                          "description": "List of recipes IDs added to favorites"
-                        },
-                        "own": {
-                          "type": "array",
-                          "description": "List of recipes IDs created by user"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
-                        },
-                        "updatedAt": {
-                          "type": "string",
-                          "format": "date-time"
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "_id",
+                            "name",
+                            "email",
+                            "favorites",
+                            "own",
+                            "createdAt",
+                            "updatedAt"
+                          ],
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "description": "User's Id",
+                              "example": "68694eb9293e95a40224645d"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "User's name",
+                              "example": "John Doe"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "User's email address",
+                              "example": "john.doe@mail.com"
+                            },
+                            "favorites": {
+                              "type": "array",
+                              "description": "List of favorite recipes",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "_id",
+                                  "title",
+                                  "category",
+                                  "thumb"
+                                ],
+                                "properties": {
+                                  "_id": {
+                                    "type": "string",
+                                    "example": "6462a8f74c3d0ddd288980d1"
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "example": "Shakshuka"
+                                  },
+                                  "category": {
+                                    "type": "string",
+                                    "example": "Vegetarian"
+                                  },
+                                  "thumb": {
+                                    "type": "string",
+                                    "example": "https://ftp.goit.study/img/so-yummy/preview/Shakshuka.jpg"
+                                  }
+                                }
+                              }
+                            },
+                            "own": {
+                              "type": "array",
+                              "description": "List of user's own recipe IDs",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "updatedAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
                         }
                       }
                     }
@@ -391,10 +545,32 @@
         ],
         "summary": "Get list of all user's favorite recipes",
         "operationId": "getUserFavorites",
-        "description": "Retrieves all favorite recipes of the authenticated user.",
+        "description": "Retrieves all favorite recipes of the authenticated user with optional pagination.",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "description": "Page number for pagination."
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 12
+            },
+            "description": "Number of recipes per page."
           }
         ],
         "responses": {
@@ -496,7 +672,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -510,21 +686,62 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 201
                     },
                     "message": {
                       "type": "string",
-                      "example": "Recipe added to favorites"
+                      "example": "Successfully added to favorite recipes!"
                     },
                     "data": {
                       "type": "object",
                       "required": [
-                        "message"
+                        "_id",
+                        "name",
+                        "email",
+                        "favorites",
+                        "own",
+                        "createdAt",
+                        "updatedAt"
                       ],
                       "properties": {
-                        "message": {
+                        "_id": {
                           "type": "string",
-                          "example": "Recipe seccessfully added to favorites!"
+                          "example": "686aa13947d030654c6e4513"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "john.doe@mail.com"
+                        },
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "6462a8f74c3d0ddd288980d1",
+                            "65ca67e7ae7f10c88b598384"
+                          ]
+                        },
+                        "own": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": []
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-07-06T16:15:53.629Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-07-07T16:37:31.244Z"
                         }
                       }
                     }
@@ -628,7 +845,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Recipe removed from favorites"
+                      "example": "Recipe with id 6462a8f74c3d0ddd288980c7 was successfully removed from favorites"
                     }
                   }
                 }
@@ -913,8 +1130,82 @@
             "bearerAuth": []
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "decr",
+                  "cookiesTime",
+                  "category",
+                  "ingredient",
+                  "ingredientAmount",
+                  "instruction"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "description": "Recipe title",
+                    "example": "Chocolate Cake"
+                  },
+                  "descr": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "description": "Short description",
+                    "example": "Rich and moist chocolate cake."
+                  },
+                  "time": {
+                    "type": "string",
+                    "minimum": 1,
+                    "maximum": 360,
+                    "description": "Time in minutes (number or string)",
+                    "example": "45"
+                  },
+                  "cals": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000,
+                    "description": "Calories per serving",
+                    "example": 380
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Recipe category or slug",
+                    "example": "Dessert"
+                  },
+                  "ingredients": {
+                    "type": "string",
+                    "example": "Flour",
+                    "description": "Must match one of the existing ingredients"
+                  },
+                  "ingredientAmount": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 16,
+                    "example": 5
+                  },
+                  "instructions": {
+                    "type": "string",
+                    "maxLength": 1200,
+                    "description": "Cooking steps",
+                    "example": "1. Mix ingredients 2. Bake 30 min at 180 °C 3. Let cool"
+                  },
+                  "thumb": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Optional recipe image file (max 2MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -932,7 +1223,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "New recipe seccessfully added!"
+                      "example": "Recipe created successfully"
                     },
                     "data": {
                       "type": "object",
@@ -1230,49 +1521,6 @@
           }
         }
       },
-      "user": {
-        "type": "object",
-        "required": [
-          "_id",
-          "name",
-          "email",
-          "favorites",
-          "own"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email address",
-            "example": "john.doe@mail.com"
-          },
-          "favorites": {
-            "type": "array",
-            "description": "List of recipes IDs added to favorites"
-          },
-          "own": {
-            "type": "array",
-            "description": "List of recipes IDs created by user"
-          },
-          "_id": {
-            "type": "string",
-            "description": "User id",
-            "example": "64c8d958249fae54bae90bb8"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "userLogin": {
         "type": "object",
         "required": [
@@ -1323,6 +1571,12 @@
             "maxLength": 64,
             "description": "Title should have at most 64 characters",
             "example": "Callaloo Jamaican Style"
+          },
+          "cals": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "description": "Optional calories amount, between 1 and 10000"
           },
           "category": {
             "type": "string",
@@ -1457,7 +1711,7 @@
           "_id": {
             "type": "string",
             "description": "Ingredient Id",
-            "example": "640c2dd963a319ea671e3804"
+            "example": "686bd76645da07c250ba8280"
           },
           "name": {
             "type": "string",
@@ -1526,7 +1780,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Access token is expired"
+                  "example": "Please provide Authorization header"
                 }
               }
             }
