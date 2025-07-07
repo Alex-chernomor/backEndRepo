@@ -1136,27 +1136,38 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "decr",
-                  "cookiesTime",
-                  "category",
-                  "ingredient",
-                  "ingredientAmount",
-                  "instruction"
-                ],
                 "properties": {
-                  "name": {
+                  "title": {
                     "type": "string",
                     "maxLength": 64,
                     "description": "Recipe title",
                     "example": "Chocolate Cake"
                   },
-                  "descr": {
+                  "category": {
+                    "type": "string",
+                    "description": "Recipe category or slug",
+                    "example": "Dessert"
+                  },
+                  "owner": {
+                    "type": "string",
+                    "example": "64c8d958249fae54bae90bb9"
+                  },
+                  "instructions": {
+                    "type": "string",
+                    "maxLength": 1200,
+                    "description": "Cooking steps",
+                    "example": "Mix ingredients. Bake 30 min at 180 °C. Let cool"
+                  },
+                  "description": {
                     "type": "string",
                     "maxLength": 200,
                     "description": "Short description",
                     "example": "Rich and moist chocolate cake."
+                  },
+                  "thumb": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Optional recipe image file (max 2MB)"
                   },
                   "time": {
                     "type": "string",
@@ -1165,6 +1176,11 @@
                     "description": "Time in minutes (number or string)",
                     "example": "45"
                   },
+                  "ingredients": {
+                    "type": "string",
+                    "description": "JSON array as string (e.g., '[{\"name\":\"Flour\",\"measure\":\"1 cup\"}]')",
+                    "example": "[{\"id\":\"640c2dd963a319ea671e37a8\",\"measure\":\"2 pcs\", \"_id\":\"640c2dd963a319ea671e3888\"},{\"id\":\"640c2dd963a319ea671e37a8\",\"measure\":\"2 pcs\", \"_id\":\"640c2dd963a319ea671e3888\"}]"
+                  },
                   "cals": {
                     "type": "integer",
                     "minimum": 1,
@@ -1172,32 +1188,17 @@
                     "description": "Calories per serving",
                     "example": 380
                   },
-                  "category": {
+                  "_id": {
                     "type": "string",
-                    "description": "Recipe category or slug",
-                    "example": "Dessert"
+                    "example": "640c2dd963a319ea671e3888"
                   },
-                  "ingredients": {
+                  "createdAt": {
                     "type": "string",
-                    "example": "Flour",
-                    "description": "Must match one of the existing ingredients"
+                    "format": "date-time"
                   },
-                  "ingredientAmount": {
-                    "type": "integer",
-                    "minimum": 2,
-                    "maximum": 16,
-                    "example": 5
-                  },
-                  "instructions": {
+                  "updatedAt": {
                     "type": "string",
-                    "maxLength": 1200,
-                    "description": "Cooking steps",
-                    "example": "1. Mix ingredients 2. Bake 30 min at 180 °C 3. Let cool"
-                  },
-                  "thumb": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "Optional recipe image file (max 2MB)"
+                    "format": "date-time"
                   }
                 }
               }
@@ -1219,7 +1220,7 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 201
                     },
                     "message": {
                       "type": "string",
