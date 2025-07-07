@@ -130,6 +130,7 @@ export const deleteFavoriteController = async (req, res, next) => {
   res.status(200).json({
     status: 200,
     message: `Recipe with id ${recipeId} was successfully removed from favorites`,
+    data: favourite,
   });
 };
 
