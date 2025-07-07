@@ -5,8 +5,69 @@ operationId: addNewRecipe
 description: Add new recipe
 security:
   - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - decr
+          - cookiesTime
+          - category
+          - ingredient
+          - ingredientAmount
+          - instruction
+        properties:
+          name:
+            type: string
+            maxLength: 64
+            description: Recipe title
+            example: Chocolate Cake
+          descr:
+            type: string
+            maxLength: 200
+            description: Short description
+            example: Rich and moist chocolate cake.
+          time:
+            type: string
+            minimum: 1
+            maximum: 360
+            description: Time in minutes (number or string)
+            example: '45'
+          cals:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            description: Calories per serving
+            example: 380
+          category:
+            type: string
+            description: Recipe category or slug
+            example: Dessert
+          ingredients:
+            type: string
+            example: Flour
+            description: Must match one of the existing ingredients
+          ingredientAmount:
+            type: integer
+            minimum: 2
+            maximum: 16
+            example: 5
+          instructions:
+            type: string
+            maxLength: 1200
+            description: Cooking steps
+            example: 1. Mix ingredients
+              2. Bake 30 min at 180 °C
+              3. Let cool
+          thumb:
+            type: string
+            format: binary
+            description: Optional recipe image file (max 2MB)
 responses:
-  '200':
+  '201':
     description: OK
     content:
       application/json:
@@ -22,7 +83,7 @@ responses:
               example: 200
             message:
               type: string
-              example: New recipe seccessfully added!
+              example: Recipe created successfully
             data:
               type: object
               $ref: ../../components/schemas/recipe.yaml

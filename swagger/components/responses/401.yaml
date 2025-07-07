@@ -13,4 +13,4 @@ content:
           example: 401
         message:
           type: string
-          example: Access token is expired
+          example: Please provide Authorization header

@@ -18,8 +18,9 @@ responses:
         schema:
           type: object
           required:
-            - accessToken
-            - name
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -29,13 +30,51 @@ responses:
               example: Login successfully
             data:
               type: object
+              required:
+                - token
+                - user
               properties:
-                accessToken:
+                token:
                   type: string
-                  example: '60d0fe4f5311236168a109ca'
-                name:
-                  type: string
-                  example: John Doe
+                  example: 4/lRcCVW/D3L84UaFmtycO0ob4C55rGUv/iS9niV
+                user:
+                  type: object
+                  required:
+                    - _id
+                    - name
+                    - email
+                    - favorites
+                    - own
+                    - createdAt
+                    - updatedAt
+                  properties:
+                    _id:
+                      type: string
+                      example: 686a88d647d030654c6df52e
+                    name:
+                      type: string
+                      example: Ann
+                    email:
+                      type: string
+                      example: Ann@mail.com
+                    favorites:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    own:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-06T14:31:50.631Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-06T14:31:50.631Z
   '400':
     description: Bad Request
     content:
@@ -50,7 +89,7 @@ responses:
               type: array
               items:
                 type: string
-                example: Invalid email format
+              example: ['Invalid email format']
   '404':
     $ref: ../../../components/responses/404.yaml
   '500':
