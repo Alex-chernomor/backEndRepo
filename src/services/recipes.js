@@ -41,12 +41,7 @@ export const getRecipeById = async (recipeId) => {
   return await Recipe.findOne({ _id: recipeId });
 };
 
-export const getRecipesOwn = async (userId) => {
-  const page = 1;
-  const perPage = 12;
-  const sortBy = 'createdAt';
-  const sortOrder = -1;
-
+export const getRecipesOwn = async ({ page, perPage, owner }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
@@ -55,10 +50,7 @@ export const getRecipesOwn = async (userId) => {
 
   const [recipesCount, recipes] = await Promise.all([
     Recipe.countDocuments({ owner: userId }),
-    Recipe.find({ owner: userId })
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder }),
+    Recipe.find({ owner: userId }).skip(skip).limit(limit),
   ]);
 
   const paginationData = calculatePaginationData(recipesCount, perPage, page);
