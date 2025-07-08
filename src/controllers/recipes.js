@@ -13,10 +13,12 @@ import {
 } from '../services/recipes.js';
 
 import { User } from '../models/user.js';
+import { Category } from '../models/category.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
+import { createRecipeSchema } from '../validation/recipe.js';
 import mongoose from 'mongoose';
 
 export const getAllRecipesController = async (req, res) => {
@@ -67,11 +69,46 @@ export const createRecipeController = async (req, res) => {
     }
   }
 
-  const recipeData = {
+  // Формуємо об'єкт для валідації (з уже розпарсеними ingredients)
+  const dataToValidate = {
     ...req.body,
     ingredients,
-    owner: req.user._id,
-    thumb,
+    thumb, // якщо хочеш валідовувати, можна і це додати
+    owner: req.user._id.toString(),
+  };
+
+  // Валідовуємо через Joi
+  const { error } = createRecipeSchema.validate(dataToValidate, {
+    abortEarly: false,
+  });
+  if (error) {
+    // Повертаємо всі помилки в одному масиві
+    return res
+      .status(400)
+      .json({ message: error.details.map((d) => d.message) });
+  }
+
+  // Перевірка валідності categoryId в MongoDB
+  if (!mongoose.Types.ObjectId.isValid(dataToValidate.category)) {
+    return res.status(400).json({ message: 'Invalid category ID format' });
+  }
+
+  const categoryExists = await Category.findById(dataToValidate.category);
+  if (!categoryExists) {
+    return res.status(400).json({ message: 'Category not found' });
+  }
+
+  // const recipeData = {
+  //   ...req.body,
+  //   category: categoryId,
+  //   ingredients,
+  //   owner: req.user._id,
+  //   thumb,
+  // };
+
+  // Створюємо рецепт
+  const recipeData = {
+    ...dataToValidate,
   };
 
   const recipe = await createRecipe(recipeData);
