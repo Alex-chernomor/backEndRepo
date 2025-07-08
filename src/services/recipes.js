@@ -45,12 +45,12 @@ export const getRecipesOwn = async ({ page, perPage, owner }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const user = await User.findById(userId);
+  const user = await User.findById(owner);
   if (!user) throw new Error('User not found');
 
   const [recipesCount, recipes] = await Promise.all([
-    Recipe.countDocuments({ owner: userId }),
-    Recipe.find({ owner: userId }).skip(skip).limit(limit),
+    Recipe.countDocuments({ owner: owner }),
+    Recipe.find({ owner: owner }).skip(skip).limit(limit),
   ]);
 
   const paginationData = calculatePaginationData(recipesCount, perPage, page);
