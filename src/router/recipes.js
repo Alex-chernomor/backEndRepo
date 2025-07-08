@@ -9,8 +9,8 @@ import {
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { upload } from '../middlewares/upload.js';
-import { validateBody } from '../middlewares/validateBody.js';
-import { createRecipeSchema } from '../validation/recipe.js';
+// import { validateBody } from '../middlewares/validateBody.js';
+// import { createRecipeSchema } from '../validation/recipe.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -22,9 +22,16 @@ router.get('/:recipeId', isValidId, ctrlWrapper(getRecipeByIdController));
 router.post(
   '/',
   upload.single('thumb'),
-  jsonParser,
   auth,
-  validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );
+
+// router.post(
+//   '/',
+//   upload.single('thumb'),
+//   jsonParser,
+//   auth,
+//   validateBody(createRecipeSchema),
+//   ctrlWrapper(createRecipeController),
+// );
 export default router;

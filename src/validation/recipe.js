@@ -22,23 +22,24 @@ export const createRecipeSchema = Joi.object({
     'string.max': 'Max 10000 calories',
   }),
   category: Joi.string()
-    .valid(
-      'Seafood',
-      'Lamb',
-      'Starter',
-      'Chicken',
-      'Beef',
-      'Dessert',
-      'Vegan',
-      'Pork',
-      'Vegetarian',
-      'Miscellaneous',
-      'Pasta',
-      'Breakfast',
-      'Side',
-      'Goat',
-      'Soup',
-    )
+    .pattern(/^[0-9a-fA-F]{24}$/)
+    // .valid(
+    //   'Seafood',
+    //   'Lamb',
+    //   'Starter',
+    //   'Chicken',
+    //   'Beef',
+    //   'Dessert',
+    //   'Vegan',
+    //   'Pork',
+    //   'Vegetarian',
+    //   'Miscellaneous',
+    //   'Pasta',
+    //   'Breakfast',
+    //   'Side',
+    //   'Goat',
+    //   'Soup',
+    // )
     .required()
     .messages({
       'any.required': 'Category type is required',
