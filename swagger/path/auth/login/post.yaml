@@ -12,34 +12,85 @@ requestBody:
         $ref: ../../../components/schemas/userLogin.yaml
 responses:
   '200':
-    description: Successfully authenticated user
+    description: OK
     content:
       application/json:
         schema:
           type: object
           required:
             - status
-            - token
-            - user
+            - message
+            - data
           properties:
             status:
               type: integer
               example: 200
-            token:
+            message:
               type: string
-              description: JWT access token
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-            user:
-              $ref: ../../../components/schemas/user.yaml
+              example: Login successfully
+            data:
+              type: object
+              required:
+                - token
+                - user
+              properties:
+                token:
+                  type: string
+                  example: 4/lRcCVW/D3L84UaFmtycO0ob4C55rGUv/iS9niV
+                user:
+                  type: object
+                  required:
+                    - _id
+                    - name
+                    - email
+                    - favorites
+                    - own
+                    - createdAt
+                    - updatedAt
+                  properties:
+                    _id:
+                      type: string
+                      example: 686a88d647d030654c6df52e
+                    name:
+                      type: string
+                      example: Ann
+                    email:
+                      type: string
+                      example: Ann@mail.com
+                    favorites:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    own:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-06T14:31:50.631Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-06T14:31:50.631Z
   '400':
-    description: Invalid email or password
+    description: Bad Request
     content:
       application/json:
         schema:
           type: object
           properties:
+            status:
+              type: integer
+              example: 400
             message:
-              type: string
-              example: Invalid email or password
+              type: array
+              items:
+                type: string
+              example: ['Invalid email format']
+  '404':
+    $ref: ../../../components/responses/404.yaml
   '500':
     $ref: ../../../components/responses/500.yaml

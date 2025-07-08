@@ -1,0 +1,93 @@
+# Gleb Nikitin
+
+tags:
+  - Users
+summary: Get current user info
+operationId: getUser
+description: Get current user information
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - data
+          properties:
+            status:
+              type: string
+              example: success
+            data:
+              type: object
+              required:
+                - user
+              properties:
+                user:
+                  type: object
+                  required:
+                    - _id
+                    - name
+                    - email
+                    - favorites
+                    - own
+                    - createdAt
+                    - updatedAt
+                  properties:
+                    _id:
+                      type: string
+                      description: User's Id
+                      example: 68694eb9293e95a40224645d
+                    name:
+                      type: string
+                      description: User's name
+                      example: John Doe
+                    email:
+                      type: string
+                      description: User's email address
+                      example: john.doe@mail.com
+                    favorites:
+                      type: array
+                      description: List of favorite recipes
+                      items:
+                        type: object
+                        required:
+                          - _id
+                          - title
+                          - category
+                          - thumb
+                        properties:
+                          _id:
+                            type: string
+                            example: 6462a8f74c3d0ddd288980d1
+                          title:
+                            type: string
+                            example: Shakshuka
+                          category:
+                            type: string
+                            example: Vegetarian
+                          thumb:
+                            type: string
+                            example: https://ftp.goit.study/img/so-yummy/preview/Shakshuka.jpg
+                    own:
+                      type: array
+                      description: List of user's own recipe IDs
+                      items:
+                        type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+  '400':
+    $ref: ../../../components/responses/400.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '404':
+    $ref: ../../../components/responses/404.yaml
+  '500':
+    $ref: ../../../components/responses/500.yaml

@@ -5,15 +5,27 @@ import bcrypt from 'bcrypt';
 import { Session } from '../models/session.js';
 
 export const registerUser = async (payload) => {
-  const user = await User.findOne({ email: payload.email });
-
-  if (user) {
+  const existingUser = await User.findOne({ email: payload.email });
+  if (existingUser) {
     throw createHttpError(409, 'This email is already in use');
   }
+  //хешую пароль
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-  payload.password = await bcrypt.hash(payload.password, 10);
+  const user = await User.create({ ...payload, password: hashedPassword });
 
-  return await User.create(payload);
+  const accessToken = crypto.randomBytes(30).toString('base64');
+  const refreshToken = crypto.randomBytes(30).toString('base64');
+
+  const session = await Session.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 60 * 1000),
+    refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  });
+
+  return { session, user };
 };
 
 export async function loginUser(email, password) {
@@ -28,13 +40,18 @@ export async function loginUser(email, password) {
   const accessToken = crypto.randomBytes(30).toString('base64');
   const refreshToken = crypto.randomBytes(30).toString('base64');
 
-  return Session.create({
+  const session = await Session.create({
     userId: user._id,
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 60 * 1000),
     refreshTokenValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   });
+
+  return {
+    session,
+    user,
+  };
 }
 
 export const logoutUser = async (sessionId) => {

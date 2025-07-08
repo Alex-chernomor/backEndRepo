@@ -41,24 +41,16 @@ export const getRecipeById = async (recipeId) => {
   return await Recipe.findOne({ _id: recipeId });
 };
 
-export const getRecipesOwn = async (userId) => {
-  const page = 1;
-  const perPage = 12;
-  const sortBy = 'createdAt';
-  const sortOrder = -1;
-
+export const getRecipesOwn = async ({ page, perPage, owner }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const user = await User.findById(userId);
+  const user = await User.findById(owner);
   if (!user) throw new Error('User not found');
 
   const [recipesCount, recipes] = await Promise.all([
-    Recipe.countDocuments({ owner: userId }),
-    Recipe.find({ owner: userId })
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder }),
+    Recipe.countDocuments({ owner: owner }),
+    Recipe.find({ owner: owner }).skip(skip).limit(limit),
   ]);
 
   const paginationData = calculatePaginationData(recipesCount, perPage, page);
@@ -89,12 +81,7 @@ export const deleteFavorite = async (userId, recipeId) => {
   );
 };
 
-export const getAllFavorites = async (userId) => {
-  const page = 1;
-  const perPage = 12;
-  const sortBy = 'createdAt';
-  const sortOrder = -1;
-
+export const getAllFavorites = async (userId, page = 1, perPage = 12) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
@@ -106,13 +93,17 @@ export const getAllFavorites = async (userId) => {
 
   const [recipesCount, recipes] = await Promise.all([
     Recipe.countDocuments(favoriteRecipes),
-    Recipe.find(favoriteRecipes)
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder }),
+    Recipe.find(favoriteRecipes).skip(skip).limit(limit),
   ]);
 
-  const paginationData = calculatePaginationData(recipesCount, perPage, page);
+  const totalPages = Math.ceil(recipesCount / perPage);
+
+  const paginationData = calculatePaginationData(
+    recipesCount,
+    perPage,
+    page,
+    totalPages,
+  );
 
   return {
     data: recipes,

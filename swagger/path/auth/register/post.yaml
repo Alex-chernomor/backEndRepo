@@ -12,7 +12,7 @@ requestBody:
         $ref: ../../../components/schemas/userRegister.yaml
 responses:
   '201':
-    description: Successfully registered new user
+    description: Created
     content:
       application/json:
         schema:
@@ -27,12 +27,73 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully registered new user
+              example: Successfully registered a user!
             data:
               type: object
-              $ref: ../../../components/schemas/user.yaml
+              required:
+                - token
+                - user
+              properties:
+                token:
+                  type: string
+                  example: gz7o9H2rGAQMUDpk+Tkio1QdripNtKLRv+N+zBQ+
+                user:
+                  type: object
+                  required:
+                    - _id
+                    - name
+                    - email
+                    - favorites
+                    - own
+                    - createdAt
+                    - updatedAt
+                  properties:
+                    name:
+                      type: string
+                      example: xxx
+                    email:
+                      type: string
+                      example: xxxxx@mail.com
+                    favorites:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    own:
+                      type: array
+                      items:
+                        type: string
+                      example: []
+                    _id:
+                      type: string
+                      example: 686b1cf710c803fb56b2990d
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-07T01:03:51.580Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2025-07-07T01:03:51.580Z
+
+              # $ref: ../../../components/schemas/user.yaml
   '400':
-    $ref: ../../../components/responses/400.yaml
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: array
+              items:
+                type: string
+                example: 'Invalid email format'
+  '404':
+    $ref: ../../../components/responses/404.yaml
   '409':
     $ref: ../../../components/responses/409.yaml
   '500':

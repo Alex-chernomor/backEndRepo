@@ -1,46 +1,123 @@
 tags:
   - Recipes
-summary: Create recipe
-operationId: createRecipe
-description: Create a new recipe
+summary: Add new recipe
+operationId: addNewRecipe
+description: Add new recipe
 security:
   - bearerAuth: []
 requestBody:
+  required: true
   content:
     multipart/form-data:
       schema:
         type: object
         required:
           - name
-          - phoneNumber
-          - contactType
+          - decr
+          - cookiesTime
+          - category
+          - ingredient
+          - ingredientAmount
+          - instruction
         properties:
           name:
-            description: "Contacts's name"
             type: string
-            example: 'John Doe'
-          phoneNumber:
-            description: "Contacts's phone number"
+            maxLength: 64
+            description: Recipe title
+            example: Chocolate Cake
+          descr:
             type: string
-            example: 1234567890
-          email:
-            description: "Contacts's email"
+            maxLength: 200
+            description: Short description
+            example: Rich and moist chocolate cake.
+          time:
             type: string
-            example: john.doe@mail.com
-          isFavourite:
-            description: "Contact's category"
-            type: boolean
-          contactType:
-            description: "Contact's type"
+            minimum: 1
+            maximum: 360
+            description: Time in minutes (number or string)
+            example: '45'
+          cals:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            description: Calories per serving
+            example: 380
+          category:
             type: string
-            enum: ['work', 'home', 'personal']
-          photo:
-            description: "Link to contact's photo"
+            description: Recipe category or slug
+            example: Dessert
+          ingredients:
+            type: string
+            example: Flour
+            description: Must match one of the existing ingredients
+          ingredientAmount:
+            type: integer
+            minimum: 2
+            maximum: 16
+            example: 5
+          instructions:
+            type: string
+            maxLength: 1200
+            description: Cooking steps
+            example: 1. Mix ingredients
+              2. Bake 30 min at 180 °C
+              3. Let cool
+          thumb:
             type: string
             format: binary
-
+            description: Optional recipe image file (max 2MB)
 responses:
   '201':
-    $ref: ../../components/responses/201.yaml
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Recipe created successfully
+            data:
+              type: object
+              $ref: ../../components/schemas/recipe.yaml
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: array
+              items:
+                type: string
+                example: Unexpected end of JSON input
   '401':
     $ref: ../../components/responses/401.yaml
+  '500':
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - error
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: Something went wrong on the server

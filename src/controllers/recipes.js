@@ -17,6 +17,7 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
+import mongoose from 'mongoose';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -96,17 +97,24 @@ export const getRecipeByIdController = async (req, resp) => {
 };
 
 export const getOwnRecipesController = async (req, res, next) => {
-  const own = await getRecipesOwn(req.user._id);
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const data = await getRecipesOwn({
+    page,
+    perPage,
+    owner: req.user._id,
+  });
 
   res.json({
     status: 200,
     message: 'Successfully found own recipes!',
-    data: own,
+    data,
   });
 };
 
 export const addFavoriteController = async (req, res) => {
-  const favorite = await addFavorite(req.user._id, req.params.recipeId);
+  const recipeId = new mongoose.Types.ObjectId(req.params.recipeId);
+  const favorite = await addFavorite(req.user._id, recipeId);
 
   res.status(201).json({
     status: 201,
@@ -116,7 +124,7 @@ export const addFavoriteController = async (req, res) => {
 };
 
 export const deleteFavoriteController = async (req, res, next) => {
-  const { recipeId } = req.params;
+  const recipeId = new mongoose.Types.ObjectId(req.params.recipeId);
 
   const favourite = await deleteFavorite(req.user._id, recipeId);
 
@@ -128,11 +136,13 @@ export const deleteFavoriteController = async (req, res, next) => {
   res.status(200).json({
     status: 200,
     message: `Recipe with id ${recipeId} was successfully removed from favorites`,
+    data: favourite,
   });
 };
 
 export const getAllFavoritesController = async (req, res) => {
-  const favorites = await getAllFavorites(req.user._id);
+  const { page, perPage } = parsePaginationParams(req.query);
+  const favorites = await getAllFavorites(req.user._id, page, perPage);
 
   res.status(200).json({
     status: 200,

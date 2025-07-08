@@ -8,6 +8,7 @@ required:
   - description
   - time
   - ingredients
+  - cals
   - createdAt
   - updatedAt
 properties:
@@ -17,14 +18,37 @@ properties:
     example: 507f1f77bcf86cd799439011
   title:
     type: string
-    description: Recipe title
+    maxLength: 64
+    description: Title should have at most 64 characters
     example: Callaloo Jamaican Style
+  cals:
+    type: string
+    minLength: 1
+    maxLength: 10000
+    description: Optional calories amount, between 1 and 10000
   category:
     type: string
-    description: Recipe category
+    enum:
+      - Seafood
+      - Lamb
+      - Starter
+      - Chicken
+      - Beef
+      - Dessert
+      - Vegan
+      - Pork
+      - Vegetarian
+      - Miscellaneous
+      - Pasta
+      - Breakfast
+      - Side
+      - Goat
+      - Soup
+    description: One of the predefined categories
     example: Soup
   owner:
     type: string
+    pattern: '^[0-9a-fA-F]{24}$'
     description: Recipe owner's Id
     example: 6592008029c8c3e4dc76256c
   area:
@@ -33,31 +57,49 @@ properties:
     example: British
   instructions:
     type: string
-    description: Recipe instructions
+    maxLength: 1200
+    description: Recipe detailed instructions
     example: Heat oven to 160C/fan 140C/gas 3. Heat some dripping or butter in a large shallow casserole dish, brown the lamb in batches...
   description:
     type: string
-    description: Recipe description
+    maxLength: 200
+    description: Description should have at most 200 characters
     example: A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds.
   thumb:
     type: string
-    format: url
-    description: Recipe photo url
+    format: binary
+    description: Recipe image file
     example: https://res.cloudinary.com/dvda8nxai/image/upload/v1749381064/b7hiztxuoqgaauryqleh.jpg
   time:
     type: string
-    description: Cooking time in minutes
+    minLength: 1
+    maxLength: 360
+    description: Cooking time in minutes, between 1 and 360
     example: 45
   ingredients:
     type: array
+    minItems: 2
+    maxItems: 16
     items:
       type: object
+      required:
+        - _id
+        - id
+        - measure
       properties:
+        _id:
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+          description: Ingredient ObjectId
+          example: 640c2dd963a319ea671e3687
         id:
           type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+          description: Ingredient ObjectId
           example: 640c2dd963a319ea671e3687
         measure:
           type: string
+          description: Ingredient amount
           example: '2 cups'
   createdAt:
     type: string

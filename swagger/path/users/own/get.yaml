@@ -1,22 +1,13 @@
-# Khrystyna Pylypenko
-
 tags:
   - Users
-summary: Get list of all user's favorite recipes
-operationId: getUserFavorites
-description: Retrieves all favorite recipes of the authenticated user.
-parameters:
-  - in: path
-    name: userId
-    required: true
-    schema:
-      type: string
-      example: '64c8d958249fae54bae90bb9'
+summary: Get list of user's own recipes
+operationId: getUserOwnRecipes
+description: Retrieves list of users own recipes.
 security:
   - bearerAuth: []
 responses:
   '200':
-    description: Successfully retrieved favorite recipes
+    description: OK
     content:
       application/json:
         schema:
@@ -31,14 +22,14 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found favorite recipes!
+              example: Successfully found own recipes!
             data:
               type: object
               properties:
                 data:
                   type: array
                   items:
-                    $ref: ../../../../components/schemas/recipe.yaml
+                    $ref: ../../../components/schemas/recipe.yaml
                 page:
                   type: integer
                   example: 1
@@ -58,8 +49,8 @@ responses:
                   type: boolean
                   example: false
   '401':
-    $ref: ../../../../components/responses/401.yaml
+    $ref: ../../../components/responses/401.yaml
   '404':
-    $ref: ../../../../components/responses/404.yaml
+    $ref: ../../../components/responses/404.yaml
   '500':
-    $ref: ../../../../components/responses/500.yaml
+    $ref: ../../../components/responses/500.yaml

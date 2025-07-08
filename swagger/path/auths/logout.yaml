@@ -1,9 +1,0 @@
-tags:
-  - Auth
-summary: Logout user
-operationId: logoutUser
-description: 'Logout user from the app'
-security: []
-responses:
-  '204':
-    description: 'Successfully logout user'
