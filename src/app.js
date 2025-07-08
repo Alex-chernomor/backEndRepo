@@ -28,7 +28,13 @@ app.use(
 // ✅ CORS после базовых middleware (можно и раньше, но лучше так)
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://front-end-repo-nu.vercel.app'],
+
+    origin: [
+      'http://localhost:5173',
+      'https://front-end-repo-nu.vercel.app',
+      'https://front-end-repo-eosin.vercel.app',
+    ],
+
     credentials: true,
   }),
 );
