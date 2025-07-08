@@ -93,10 +93,7 @@ export const getAllFavorites = async (userId, page = 1, perPage = 12) => {
 
   const [recipesCount, recipes] = await Promise.all([
     Recipe.countDocuments(favoriteRecipes),
-    Recipe.find(favoriteRecipes)
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder }),
+    Recipe.find(favoriteRecipes).skip(skip).limit(limit),
   ]);
 
   const totalPages = Math.ceil(recipesCount / perPage);
