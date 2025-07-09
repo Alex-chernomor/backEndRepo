@@ -20,6 +20,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 import { createRecipeSchema } from '../validation/recipe.js';
 import mongoose from 'mongoose';
+import { getAllCategories } from '../services/categories.js';
 
 export const getAllRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -47,7 +48,7 @@ export const createRecipeController = async (req, res) => {
     getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
 
   if (uploadToCloudinarySwitcher) {
-    const result = await uploadToCloudinary(req.file.path);
+    const result = await uploadToCloudinary(req.file?.path);
     await fs.unlink(req.file.path);
     thumb = result.secure_url;
   } else {
@@ -93,7 +94,11 @@ export const createRecipeController = async (req, res) => {
     return res.status(400).json({ message: 'Invalid category ID format' });
   }
 
-  const categoryExists = await Category.findById(dataToValidate.category);
+  const categories = await getAllCategories();
+  const categoryExists = categories.find(
+    (item) => String(item._id) === dataToValidate.category,
+  );
+  console.log(categoryExists);
   if (!categoryExists) {
     return res.status(400).json({ message: 'Category not found' });
   }
