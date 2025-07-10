@@ -17,7 +17,7 @@ export const getAllRecipes = async ({
     recipesQuery.where('category').equals(category);
   }
   if (ingredientId) {
-    recipesQuery.where('ingredients.id').equals(ingredientId);
+    recipesQuery.where('ingredients').elemMatch({ id: ingredientId });
   }
   if (query) {
     recipesQuery.where('title').regex(new RegExp(query, 'i'));
