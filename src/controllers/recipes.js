@@ -46,16 +46,18 @@ export const createRecipeController = async (req, res) => {
   const uploadToCloudinarySwitcher =
     getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true';
 
-  if (uploadToCloudinarySwitcher) {
-    const result = await uploadToCloudinary(req.file.path);
-    await fs.unlink(req.file.path);
-    thumb = result.secure_url;
-  } else {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src', 'uploads', 'photos', req.file.filename),
-    );
-    thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
+  if (req.file) {
+    if (uploadToCloudinarySwitcher) {
+      const result = await uploadToCloudinary(req.file?.path);
+      await fs.unlink(req.file.path);
+      thumb = result.secure_url;
+    } else {
+      await fs.rename(
+        req.file.path,
+        path.resolve('src', 'uploads', 'photos', req.file.filename),
+      );
+      thumb = `${getEnvVar('SERVER_ADRESS')}/photos/${req.file.filename}`;
+    }
   }
 
   let ingredients = req.body.ingredients;
@@ -92,21 +94,13 @@ export const createRecipeController = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(dataToValidate.category)) {
     return res.status(400).json({ message: 'Invalid category ID format' });
   }
-
+  console.log('categoryExists');
   const categoryExists = await Category.findById(dataToValidate.category);
+  console.log(categoryExists);
   if (!categoryExists) {
     return res.status(400).json({ message: 'Category not found' });
   }
 
-  // const recipeData = {
-  //   ...req.body,
-  //   category: categoryId,
-  //   ingredients,
-  //   owner: req.user._id,
-  //   thumb,
-  // };
-
-  // Створюємо рецепт
   const recipeData = {
     ...dataToValidate,
   };
